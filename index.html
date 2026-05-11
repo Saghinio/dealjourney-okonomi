@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Faktura Tracker",
+  "schemaVersion": 1,
+  "description": "DealJourney AS – Faktura & Utlegg tracker med Supabase-synkronisering, AI-utlesning av bilder, inline redigering, månedsoversikt og CSV import/eksport."
+}
+</script>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealJourney AS – Faktura & Utlegg</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f1f5f9; color: #1e293b; min-height: 100vh; }
+input,select,button,textarea { font-family: inherit; }
+.header { background: white; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; }
+.header-top { max-width: 1140px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark { width: 36px; height: 36px; background: linear-gradient(135deg,#3b82f6,#1d4ed8); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.logo-name { font-weight: 700; font-size: 16px; color: #0f172a; }
+.logo-sub { font-size: 11px; color: #94a3b8; }
+.sync-status { font-size: 12px; color: #16a34a; font-weight: 500; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.tabs { max-width: 1140px; margin: 0 auto; padding: 0 24px; display: flex; gap: 2px; }
+.tab-btn { padding: 9px 16px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; transition: all .15s; }
+.tab-btn.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+.content { max-width: 1140px; margin: 0 auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+.card-hdr { padding: 13px 18px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+.card-title { font-weight: 600; color: #0f172a; font-size: 14px; }
+.card-sub { font-weight: 400; color: #94a3b8; font-size: 13px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+.kpi { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 14px 16px; }
+.kpi-lbl { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing:.04em; margin-bottom: 5px; }
+.kpi-val { font-size: 18px; font-weight: 700; margin: 4px 0 2px; }
+.kpi-sub { font-size: 11px; color: #94a3b8; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { padding: 9px 12px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing:.04em; background: #f8fafc; text-align: left; white-space: nowrap; border-bottom: 1px solid #e2e8f0; }
+td { padding: 10px 12px; font-size: 13px; color: #374151; border-bottom: 1px solid #f8fafc; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f0f9ff; }
+.editable { cursor: pointer; }
+.editable:hover { background: #eff6ff !important; outline: 1px dashed #bfdbfe; outline-offset: -1px; }
+.inline-inp,.inline-sel { width:100%; border:1.5px solid #3b82f6; border-radius:5px; padding:4px 8px; font-size:13px; outline:none; background:white; }
+.badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:99px; font-size:12px; font-weight:500; cursor:pointer; user-select:none; }
+.badge-ja { background:#dcfce7; color:#166534; }
+.badge-nei { background:#fef9c3; color:#854d0e; }
+.btn { padding:7px 14px; font-size:13px; font-weight:500; border-radius:8px; border:none; cursor:pointer; transition:all .15s; }
+.btn-primary { background:#3b82f6; color:white; }
+.btn-primary:hover { background:#2563eb; }
+.btn-secondary { background:white; color:#475569; border:1px solid #e2e8f0; }
+.btn-secondary:hover { background:#f8fafc; }
+.btn-del { color:#dc2626; background:none; border:1px solid #fecaca; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer; }
+.btn-del:hover { background:#fee2e2; }
+.month-sel { font-size:13px; border:1px solid #e2e8f0; border-radius:8px; padding:7px 12px; color:#475569; background:white; cursor:pointer; }
+.exp-wrap { position:relative; }
+.exp-menu { position:absolute; right:0; top:calc(100% + 4px); width:210px; background:white; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.12); z-index:200; display:none; overflow:hidden; }
+.exp-menu.open { display:block; }
+.exp-mhdr { padding:8px 14px; background:#f8fafc; font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; border-bottom:1px solid #f1f5f9; }
+.exp-item { width:100%; display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:13px; color:#374151; background:none; border:none; border-top:1px solid #f8fafc; cursor:pointer; text-align:left; }
+.exp-item:hover { background:#f8fafc; }
+.mth-row td { font-size:13px; }
+.mth-tot td { font-weight:700; background:#f1f5f9 !important; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.cat-row { display:flex; justify-content:space-between; padding:8px 18px; font-size:13px; border-bottom:1px solid #f8fafc; }
+.cat-row:last-child { border-bottom:none; }
+.imp-opts { background:white; border-radius:12px; border:1px solid #e2e8f0; padding:14px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.imp-opt { padding:6px 14px; font-size:13px; font-weight:500; border-radius:8px; border:1.5px solid #e2e8f0; background:white; color:#475569; cursor:pointer; transition:all .15s; }
+.imp-opt.active { border-color:#3b82f6; background:#eff6ff; color:#3b82f6; }
+.drop-zone { border:2px dashed #cbd5e1; background:white; border-radius:14px; padding:48px 32px; text-align:center; cursor:pointer; transition:all .2s; }
+.drop-zone:hover,.drop-zone.over { border-color:#3b82f6; background:#eff6ff; }
+.dz-icon { font-size:44px; margin-bottom:10px; }
+.dz-h { font-size:16px; font-weight:600; color:#374151; margin-bottom:6px; }
+.dz-sub { font-size:13px; color:#94a3b8; }
+.fmt { font-weight:500; }
+.fmt-csv { color:#0891b2; }
+.fmt-pdf { color:#dc2626; }
+.fmt-img { color:#7c3aed; }
+.ig-grid { display:grid; grid-template-columns:1fr 1fr; }
+.ig-col { padding:14px 18px; }
+.ig-col:first-child { border-right:1px solid #f1f5f9; }
+.ig-type { font-size:12px; font-weight:700; margin-bottom:8px; text-transform:uppercase; }
+.ig-row { display:flex; justify-content:space-between; padding:3px 0; font-size:12px; }
+.ig-f { font-weight:500; color:#374151; }
+.ig-a { color:#94a3b8; }
+.log-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; padding:11px 18px; font-size:13px; font-weight:600; color:#374151; background:none; border:none; cursor:pointer; }
+.log-row { display:flex; align-items:center; gap:12px; padding:8px 18px; font-size:13px; border-top:1px solid #f8fafc; }
+.log-ok { color:#16a34a; font-weight:700; }
+.log-err { color:#dc2626; font-weight:700; }
+.log-warn { color:#f97316; font-weight:700; }
+.log-time { margin-left:auto; color:#cbd5e1; font-size:11px; }
+.bp-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; z-index:300; }
+.bp-left { flex:0 0 55%; background:#0f172a; display:flex; flex-direction:column; overflow:hidden; }
+.bp-left-hdr { padding:13px 20px; border-bottom:1px solid #1e293b; display:flex; align-items:center; justify-content:space-between; }
+.bp-img-wrap { flex:1; overflow:auto; display:flex; align-items:flex-start; justify-content:center; padding:20px; }
+.bp-img-wrap img { max-width:100%; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,.4); }
+.bp-added { padding:10px 20px; border-top:1px solid #1e293b; max-height:180px; overflow:auto; }
+.bp-right { flex:1; background:white; display:flex; flex-direction:column; overflow:hidden; }
+.bp-right-hdr { padding:13px 20px; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; }
+.bp-form { flex:1; overflow:auto; padding:16px 20px; display:flex; flex-direction:column; gap:11px; }
+.bp-actions { padding:13px 20px; border-top:1px solid #e2e8f0; display:flex; flex-direction:column; gap:8px; }
+.ai-btn { background:linear-gradient(135deg,#6366f1,#3b82f6); color:white; border:none; border-radius:8px; padding:10px 16px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+.ai-btn:disabled { opacity:.6; cursor:not-allowed; }
+.ai-spin { width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .8s linear infinite; display:none; }
+.ai-btn.loading .ai-spin { display:block; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.ai-hint { background:#f0f9ff; border:1px solid #bfdbfe; border-radius:8px; padding:9px 12px; font-size:12px; color:#1d4ed8; display:none; }
+.ai-hint.show { display:block; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.fgrp { display:flex; flex-direction:column; gap:4px; }
+.flbl { font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:.04em; }
+.finp { width:100%; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; font-size:13px; outline:none; background:white; }
+.finp:focus { border-color:#3b82f6; box-shadow:0 0 0 3px #dbeafe; }
+.modal-bd { position:fixed; inset:0; background:rgba(0,0,0,.4); display:none; align-items:center; justify-content:center; z-index:300; padding:16px; }
+.modal-bd.open { display:flex; }
+.modal { background:white; border-radius:16px; width:100%; max-width:520px; box-shadow:0 20px 60px rgba(0,0,0,.2); overflow:hidden; }
+.modal-hdr { padding:15px 22px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+.modal-title { font-weight:600; color:#0f172a; font-size:15px; }
+.modal-x { background:none; border:none; font-size:22px; cursor:pointer; color:#94a3b8; }
+.modal-body { padding:18px 22px; display:flex; flex-direction:column; gap:13px; }
+.modal-ft { padding:13px 22px; border-top:1px solid #f1f5f9; display:flex; gap:10px; justify-content:flex-end; }
+.toast { position:fixed; bottom:24px; right:24px; background:#1e293b; color:white; padding:11px 18px; border-radius:10px; font-size:13px; font-weight:500; opacity:0; transform:translateY(10px); transition:all .3s; z-index:400; pointer-events:none; }
+.toast.show { opacity:1; transform:translateY(0); }
+.empty { padding:40px; text-align:center; color:#94a3b8; font-size:13px; }
+.loading-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; gap:16px; }
+.loading-spin { width:40px; height:40px; border:3px solid #e2e8f0; border-top-color:#3b82f6; border-radius:50%; animation:spin .8s linear infinite; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-mark">DJ</div>
+      <div>
+        <div class="logo-name">DealJourney AS</div>
+        <div class="logo-sub">Økonomi · <span class="sync-status" id="syncStatus">☁️ Kobler til...</span></div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <select class="month-sel" id="monthSel" onchange="S.filterManed=this.value;render()">
+        <option value="alle">Alle måneder</option>
+      </select>
+      <div class="exp-wrap">
+        <button class="btn btn-secondary" onclick="toggleExportMenu(event)">↑ Eksporter ▾</button>
+        <div class="exp-menu" id="expMenu">
+          <div class="exp-mhdr">Eksporter</div>
+          <button class="exp-item" onclick="doExport('utlegg')">📄 CSV – Utlegg</button>
+          <button class="exp-item" onclick="doExport('fakturaer')">📄 CSV – Fakturaer</button>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="openSettings()" title="API-nøkkel for AI">⚙</button>
+      <button class="btn btn-primary" id="addBtn" style="display:none" onclick="handleAdd()">+ Legg til</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn" onclick="goTab('oversikt')">📊 Oversikt</button>
+    <button class="tab-btn" onclick="goTab('utlegg')">💸 Utlegg</button>
+    <button class="tab-btn" onclick="goTab('fakturaer')">🧾 Fakturaer</button>
+    <button class="tab-btn" onclick="goTab('import')">📂 Importer</button>
+  </div>
+</div>
+
+<div class="content" id="mainContent">
+  <div class="loading-screen">
+    <div class="loading-spin"></div>
+    <div style="font-size:14px;color:#64748b">Laster data fra Supabase...</div>
+  </div>
+</div>
+
+<div class="modal-bd" id="euModal">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title" id="euTitle">💸 Legg til utlegg</div><button class="modal-x" onclick="closeModal('euModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="eu-dato"></div>
+        <div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="eu-kat"></select></div>
+      </div>
+      <div class="fgrp"><label class="flbl">Beskrivelse</label><input type="text" class="finp" id="eu-besk" placeholder="f.eks. Telavox"></div>
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="eu-belop" placeholder="0"></div>
+        <div class="fgrp"><label class="flbl">Referanse</label><input type="text" class="finp" id="eu-ref" placeholder="Kvittering #001"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-secondary" onclick="closeModal('euModal')">Avbryt</button><button class="btn btn-primary" onclick="saveUtlegg()">Lagre</button></div>
+  </div>
+</div>
+
+<div class="modal-bd" id="efModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hdr"><div class="modal-title" id="efTitle">🧾 Legg til faktura</div><button class="modal-x" onclick="closeModal('efModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Fakturanr.</label><input type="text" class="finp" id="ef-nr"></div>
+        <div class="fgrp"><label class="flbl">Kunde</label><input type="text" class="finp" id="ef-kunde"></div>
+      </div>
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="ef-dato"></div>
+        <div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="ef-forfall"></div>
+      </div>
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="ef-belop"></div>
+        <div class="fgrp"><label class="flbl">Netto fakturert</label><input type="number" class="finp" id="ef-netto"></div>
+      </div>
+      <div class="form-row">
+        <div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="ef-betalt"><option>Nei</option><option>Ja</option></select></div>
+        <div class="fgrp"><label class="flbl">Betalingsdato</label><input type="date" class="finp" id="ef-betalingsdato"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-secondary" onclick="closeModal('efModal')">Avbryt</button><button class="btn btn-primary" onclick="saveFaktura()">Lagre</button></div>
+  </div>
+</div>
+
+<div class="modal-bd" id="settingsModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-hdr"><div class="modal-title">⚙ Innstillinger – AI-utlesning</div><button class="modal-x" onclick="closeModal('settingsModal')">&times;</button></div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:#475569;line-height:1.6">For å bruke <strong>✨ Les av med AI</strong> trenger du en Anthropic API-nøkkel. Lagres kun lokalt i nettleseren.</p>
+      <div class="fgrp"><label class="flbl">Anthropic API-nøkkel</label><input type="password" class="finp" id="settingsKey" placeholder="sk-ant-..."></div>
+      <p style="font-size:12px;color:#94a3b8">Hent på <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#3b82f6">console.anthropic.com</a></p>
+    </div>
+    <div class="modal-ft"><button class="btn btn-secondary" onclick="closeModal('settingsModal')">Avbryt</button><button class="btn btn-primary" onclick="saveSettings()">Lagre</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── SUPABASE REST (no library needed) ───────────────────────── */
+const SB_URL = 'https://nxzkyesnjvgcvwyokwdm.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54emt5ZXNuanZnY3Z3eW9rd2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MzMyMTUsImV4cCI6MjA5MzUwOTIxNX0.f0JuZWlBBnxIspB6t6rqzJ1BDUL5BwcojpkootzAe0M';
+const SB_HDR = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+
+function setSyncStatus(msg){const el=document.getElementById('syncStatus');if(el)el.textContent=msg;}
+
+async function sbFetch(path,opts={}){
+  const r=await fetch(SB_URL+'/rest/v1/'+path,{...opts,headers:{...SB_HDR,...(opts.headers||{})}});
+  if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||err.hint||'HTTP '+r.status);}
+  if(r.status===204)return null;
+  return r.json();
+}
+async function sbUpsert(table,item){
+  try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(item)});setSyncStatus('☁️ Lagret');}
+  catch(err){toast('Lagringsfeil: '+err.message);}
+}
+async function sbUpsertMany(table,items){
+  if(!items.length)return;
+  try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(items)});setSyncStatus('☁️ Lagret');}
+  catch(err){toast('Lagringsfeil: '+err.message);}
+}
+async function sbDelete(table,id){
+  try{await sbFetch(table+'?id=eq.'+encodeURIComponent(id),{method:'DELETE'});setSyncStatus('☁️ Lagret');}
+  catch(err){toast('Slettefeil: '+err.message);}
+}
+
+/* ── CONSTANTS ─────────────────────────────────────────────────── */
+const KATEGORIER=["Reise","Overnatting","Mat/Bevertning","Telefoni/Kommunikasjon","Programvare/SaaS","Abonnement","Konsulentjenester","Faglig utvikling","Diverse","Annet"];
+const MANEDER=["Desember 2025","Januar 2026","Februar 2026","Mars 2026","April 2026","Mai 2026","Juni 2026","Juli 2026","August 2026","September 2026","Oktober 2026","November 2026","Desember 2026"];
+
+const INIT_U=[
+  {id:"u1",dato:"2025-12-01",beskrivelse:"Telavox",kategori:"Telefoni/Kommunikasjon",belop:686.25,referanse:"Kvittering #001",maned:"Desember 2025"},
+  {id:"u2",dato:"2025-12-03",beskrivelse:"Closely ink a",kategori:"Programvare/SaaS",belop:2140.79,referanse:"",maned:"Desember 2025"},
+  {id:"u3",dato:"2025-12-03",beskrivelse:"The Network",kategori:"Abonnement",belop:500,referanse:"",maned:"Desember 2025"},
+  {id:"u4",dato:"2026-01-01",beskrivelse:"Telavox",kategori:"Telefoni/Kommunikasjon",belop:686.25,referanse:"",maned:"Januar 2026"},
+  {id:"u5",dato:"2026-01-20",beskrivelse:"Fly",kategori:"Reise",belop:3236,referanse:"",maned:"Januar 2026"},
+  {id:"u6",dato:"2026-01-21",beskrivelse:"Airbnb",kategori:"Overnatting",belop:3298.93,referanse:"",maned:"Januar 2026"},
+  {id:"u7",dato:"2026-01-22",beskrivelse:"Park fly",kategori:"Reise",belop:298,referanse:"",maned:"Januar 2026"},
+  {id:"u8",dato:"2026-01-23",beskrivelse:"Flytog",kategori:"Reise",belop:48.20,referanse:"",maned:"Januar 2026"},
+  {id:"u9",dato:"2026-01-24",beskrivelse:"Flytog",kategori:"Reise",belop:48.14,referanse:"",maned:"Januar 2026"},
+  {id:"u10",dato:"2026-01-25",beskrivelse:"Mat",kategori:"Mat/Bevertning",belop:1486.01,referanse:"",maned:"Januar 2026"},
+  {id:"u11",dato:"2026-01-26",beskrivelse:"Div",kategori:"Diverse",belop:742.14,referanse:"",maned:"Januar 2026"},
+  {id:"u12",dato:"2026-02-01",beskrivelse:"Telavox",kategori:"Telefoni/Kommunikasjon",belop:686.25,referanse:"",maned:"Februar 2026"},
+  {id:"u13",dato:"2026-02-15",beskrivelse:"Grunderveks",kategori:"Faglig utvikling",belop:895,referanse:"",maned:"Februar 2026"},
+  {id:"u14",dato:"2026-02-16",beskrivelse:"Closely TP",kategori:"Programvare/SaaS",belop:1164.19,referanse:"",maned:"Februar 2026"},
+  {id:"u15",dato:"2026-02-17",beskrivelse:"The Network",kategori:"Abonnement",belop:300,referanse:"",maned:"Februar 2026"},
+  {id:"u16",dato:"2026-02-18",beskrivelse:"Samfunnsbyggerne",kategori:"Abonnement",belop:295,referanse:"",maned:"Februar 2026"},
+  {id:"u17",dato:"2026-02-19",beskrivelse:"Claude.ai 12mnd",kategori:"Programvare/SaaS",belop:2445,referanse:"",maned:"Februar 2026"},
+  {id:"u18",dato:"2026-02-28",beskrivelse:"Benjamin utlegg fra okt-feb",kategori:"Konsulentjenester",belop:23823.40,referanse:"",maned:"Februar 2026"},
+  {id:"u19",dato:"2026-03-01",beskrivelse:"Telavox",kategori:"Telefoni/Kommunikasjon",belop:686.25,referanse:"",maned:"Mars 2026"},
+  {id:"u20",dato:"2026-03-10",beskrivelse:"Homesourcing",kategori:"Konsulentjenester",belop:7359.20,referanse:"",maned:"Mars 2026"},
+  {id:"u21",dato:"2026-03-11",beskrivelse:"Claude.ai 12mnd",kategori:"Programvare/SaaS",belop:2456,referanse:"",maned:"Mars 2026"},
+  {id:"u22",dato:"2026-03-12",beskrivelse:"Samfunnsbyggerne",kategori:"Abonnement",belop:295,referanse:"",maned:"Mars 2026"},
+  {id:"u23",dato:"2026-03-25",beskrivelse:"Benjamin FebruarMars",kategori:"Konsulentjenester",belop:17662,referanse:"",maned:"Mars 2026"},
+];
+const INIT_F=[
+  {id:"f1",fakturanr:"10003",kunde:"Enske AS",fakturadato:"2025-12-10",forfallsdato:null,fakturabelop:13926,netto:13926,betalt:"Ja",betalingsdato:"2025-12-29",maned:"Desember 2025"},
+  {id:"f2",fakturanr:"10005",kunde:"Vaprodukter.No AS",fakturadato:"2026-01-01",forfallsdato:null,fakturabelop:6224,netto:6224,betalt:"Nei",betalingsdato:null,maned:"Januar 2026"},
+  {id:"f3",fakturanr:"10006",kunde:"Vingaver AS",fakturadato:"2026-01-01",forfallsdato:null,fakturabelop:15251,netto:15251,betalt:"Nei",betalingsdato:null,maned:"Januar 2026"},
+  {id:"f4",fakturanr:"10007",kunde:"Ensirkel AS",fakturadato:"2026-01-01",forfallsdato:null,fakturabelop:1188,netto:1188,betalt:"Nei",betalingsdato:null,maned:"Januar 2026"},
+  {id:"f5",fakturanr:"10008",kunde:"Sterilectric Solution AS",fakturadato:"2026-02-06",forfallsdato:null,fakturabelop:6025,netto:6025,betalt:"Ja",betalingsdato:"2026-02-20",maned:"Februar 2026"},
+  {id:"f6",fakturanr:"10009",kunde:"Hrm Kompetanse AS",fakturadato:"2026-02-12",forfallsdato:null,fakturabelop:7393.5,netto:7394,betalt:"Ja",betalingsdato:"2026-02-16",maned:"Februar 2026"},
+  {id:"f7",fakturanr:"10011",kunde:"Optimus Kompetanse AS",fakturadato:"2026-02-16",forfallsdato:null,fakturabelop:18123,netto:14498.4,betalt:"Ja",betalingsdato:"2026-03-02",maned:"Februar 2026"},
+  {id:"f8",fakturanr:"10012",kunde:"Videoutstyr Norge AS",fakturadato:"2026-03-20",forfallsdato:null,fakturabelop:22500,netto:18000,betalt:"Nei",betalingsdato:null,maned:"Mars 2026"},
+  {id:"f9",fakturanr:"10013",kunde:"Aktiv Drift AS",fakturadato:"2026-03-30",forfallsdato:"2026-04-13",fakturabelop:7485,netto:5988,betalt:"Nei",betalingsdato:null,maned:"Mars 2026"},
+  {id:"f10",fakturanr:"10014",kunde:"Polyfemos AS",fakturadato:"2026-03-30",forfallsdato:"2026-04-13",fakturabelop:7820,netto:6256,betalt:"Nei",betalingsdato:null,maned:"Mars 2026"},
+  {id:"f11",fakturanr:"10015",kunde:"Paldo AS",fakturadato:"2026-04-01",forfallsdato:"2026-04-01",fakturabelop:3081,netto:3081,betalt:"Nei",betalingsdato:null,maned:"April 2026"},
+  {id:"f12",fakturanr:"10016",kunde:"Av Signage AS",fakturadato:"2026-04-01",forfallsdato:"2026-04-01",fakturabelop:1035,netto:1035,betalt:"Nei",betalingsdato:null,maned:"April 2026"},
+  {id:"f13",fakturanr:"10017",kunde:"Surfs AS",fakturadato:"2026-04-09",forfallsdato:"2026-04-23",fakturabelop:16100,netto:16100,betalt:"Nei",betalingsdato:null,maned:"April 2026"},
+];
+
+/* ── STATE ──────────────────────────────────────────────────────── */
+let S={utlegg:[],fakturaer:[],tab:'oversikt',filterManed:'alle',impTarget:'auto',impLog:[],showLog:false,euId:null,efId:null,bp:null};
+
+/* ── UTILS ──────────────────────────────────────────────────────── */
+function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function nok(v){return new Intl.NumberFormat('nb-NO',{style:'currency',currency:'NOK'}).format(v||0);}
+function today(){return new Date().toISOString().slice(0,10);}
+function getManed(dato){if(!dato)return'';const d=new Date(dato);if(isNaN(d))return'';const s=d.toLocaleDateString('nb-NO',{month:'long',year:'numeric'});return s[0].toUpperCase()+s.slice(1);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+/* ── LOAD DATA ───────────────────────────────────────────────────── */
+async function loadData(){
+  setSyncStatus('☁️ Laster...');
+  try{
+    const[utleggData,fakturaData]=await Promise.all([
+      sbFetch('utlegg?select=*&order=dato.asc'),
+      sbFetch('fakturaer?select=*&order=fakturadato.asc')
+    ]);
+    if(!utleggData.length&&!fakturaData.length){
+      setSyncStatus('☁️ Laster inn startdata...');
+      await Promise.all([sbUpsertMany('utlegg',INIT_U),sbUpsertMany('fakturaer',INIT_F)]);
+      S.utlegg=[...INIT_U];S.fakturaer=[...INIT_F];
+    } else {
+      S.utlegg=utleggData.map(u=>({...u,belop:parseFloat(u.belop)||0}));
+      S.fakturaer=fakturaData.map(f=>({...f,fakturabelop:parseFloat(f.fakturabelop)||0,netto:parseFloat(f.netto)||0}));
+    }
+    setSyncStatus('☁️ Synkronisert');
+  }catch(err){
+    setSyncStatus('⚠️ Tilkoblingsfeil');
+    toast('Kunne ikke laste data: '+err.message);
+    S.utlegg=[];S.fakturaer=[];
+  }
+  initMonths();goTab('oversikt');
+}
+
+/* ── TABS ─────────────────────────────────────────────────────────── */
+function goTab(tab){
+  S.tab=tab;
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['oversikt','utlegg','fakturaer','import'][i]===tab));
+  const ab=document.getElementById('addBtn');
+  if(tab==='utlegg'){ab.textContent='+ Utlegg';ab.style.display='';}
+  else if(tab==='fakturaer'){ab.textContent='+ Faktura';ab.style.display='';}
+  else ab.style.display='none';
+  render();
+}
+function handleAdd(){S.tab==='utlegg'?openAddU():openAddF();}
+
+/* ── RENDER ───────────────────────────────────────────────────────── */
+function render(){
+  const c=document.getElementById('mainContent');
+  if(S.tab==='oversikt')c.innerHTML=renderOversikt();
+  else if(S.tab==='utlegg')c.innerHTML=renderUtlegg();
+  else if(S.tab==='fakturaer')c.innerHTML=renderFakturaer();
+  else c.innerHTML=renderImport();
+  bindCells();
+}
+
+function renderOversikt(){
+  const tU=S.utlegg.reduce((s,u)=>s+u.belop,0);
+  const tN=S.fakturaer.reduce((s,f)=>s+f.netto,0);
+  const tB=S.fakturaer.filter(f=>f.betalt==='Ja').reduce((s,f)=>s+f.netto,0);
+  const tO=tN-tB,tR=tB-tU;
+  const kpis=[
+    {l:'Totalt utlegg',v:nok(tU),s:S.utlegg.length+' poster',c:'#dc2626'},
+    {l:'Netto fakturert',v:nok(tN),s:S.fakturaer.length+' fakturaer',c:'#3b82f6'},
+    {l:'Betalt inn',v:nok(tB),s:S.fakturaer.filter(f=>f.betalt==='Ja').length+' fakturaer',c:'#16a34a'},
+    {l:'Utestående',v:nok(tO),s:S.fakturaer.filter(f=>f.betalt!=='Ja').length+' fakturaer',c:'#f59e0b'},
+    {l:'Netto resultat',v:nok(tR),s:'betalt inn – utlegg',c:tR>=0?'#16a34a':'#dc2626'},
+  ];
+  const kpiHtml=`<div class="kpi-grid">${kpis.map(k=>`<div class="kpi"><div class="kpi-lbl">${k.l}</div><div class="kpi-val" style="color:${k.c}">${k.v}</div><div class="kpi-sub">${k.s}</div></div>`).join('')}</div>`;
+  const mRows=MANEDER.map(m=>{
+    const mu=S.utlegg.filter(u=>u.maned===m).reduce((s,u)=>s+u.belop,0);
+    const mf=S.fakturaer.filter(f=>f.maned===m).reduce((s,f)=>s+f.netto,0);
+    const mb=S.fakturaer.filter(f=>f.maned===m&&f.betalt==='Ja').reduce((s,f)=>s+f.netto,0);
+    if(!mu&&!mf)return'';
+    const mn=mb-mu;
+    return`<tr class="mth-row"><td>${m}</td><td style="text-align:right;color:#dc2626">${mu?nok(mu):'—'}</td><td style="text-align:right;color:#3b82f6">${mf?nok(mf):'—'}</td><td style="text-align:right;color:#16a34a">${mb?nok(mb):'—'}</td><td style="text-align:right;font-weight:600;color:${mn>=0?'#16a34a':'#dc2626'}">${nok(mn)}</td></tr>`;
+  }).join('');
+  const mthHtml=`<div class="card"><div class="card-hdr"><div class="card-title">Månedlig oversikt</div></div><div class="table-scroll"><table><thead><tr><th>Måned</th><th style="text-align:right">Utlegg</th><th style="text-align:right">Netto fakturert</th><th style="text-align:right">Betalt inn</th><th style="text-align:right">Netto</th></tr></thead><tbody>${mRows}<tr class="mth-tot"><td>TOTALT</td><td style="text-align:right;color:#dc2626">${nok(tU)}</td><td style="text-align:right;color:#3b82f6">${nok(tN)}</td><td style="text-align:right;color:#16a34a">${nok(tB)}</td><td style="text-align:right;color:${tR>=0?'#16a34a':'#dc2626'}">${nok(tR)}</td></tr></tbody></table></div></div>`;
+  const catMap={};S.utlegg.forEach(u=>catMap[u.kategori]=(catMap[u.kategori]||0)+u.belop);
+  const catHtml=Object.entries(catMap).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><span>${esc(k)}</span><span style="font-weight:600;color:#dc2626">${nok(v)}</span></div>`).join('');
+  const outF=S.fakturaer.filter(f=>f.betalt!=='Ja');
+  const outHtml=outF.length?outF.map(f=>`<div class="cat-row"><span>${esc(f.kunde)}</span><span style="font-weight:600;color:#f59e0b">${nok(f.netto)}</span></div>`).join(''):`<div class="empty">Ingen utestående fakturaer 🎉</div>`;
+  return kpiHtml+mthHtml+`<div class="two-col"><div class="card"><div class="card-hdr"><div class="card-title">Utlegg per kategori</div></div>${catHtml}</div><div class="card"><div class="card-hdr"><div class="card-title">Utestående fakturaer</div></div>${outHtml}</div></div>`;
+}
+
+function renderUtlegg(){
+  const list=S.filterManed==='alle'?S.utlegg:S.utlegg.filter(u=>u.maned===S.filterManed);
+  const tot=list.reduce((s,u)=>s+u.belop,0);
+  const rows=list.map((u,i)=>`<tr style="background:${i%2?'#fafafa':'white'}">
+    <td class="editable" data-dt="u" data-id="${u.id}" data-f="dato" data-ft="date">${esc(u.dato)||'—'}</td>
+    <td class="editable" data-dt="u" data-id="${u.id}" data-f="beskrivelse" data-ft="text" style="font-weight:500;color:#0f172a">${esc(u.beskrivelse)||'<em style="color:#94a3b8">Tom</em>'}</td>
+    <td class="editable" data-dt="u" data-id="${u.id}" data-f="kategori" data-ft="select" data-opts="${KATEGORIER.join('|')}">${esc(u.kategori)}</td>
+    <td class="editable" data-dt="u" data-id="${u.id}" data-f="belop" data-ft="number" style="text-align:right;font-weight:600;color:#dc2626">${nok(u.belop)}</td>
+    <td class="editable" data-dt="u" data-id="${u.id}" data-f="referanse" data-ft="text" style="color:#94a3b8;font-size:12px">${esc(u.referanse)||'—'}</td>
+    <td style="color:#94a3b8;font-size:12px">${esc(u.maned)}</td>
+    <td style="text-align:right"><button class="btn-del" onclick="delItem('u','${u.id}')">✕</button></td>
+  </tr>`).join('');
+  return`<div class="card"><div class="card-hdr"><div><span class="card-title">Utleggsregister</span> <span class="card-sub">(${list.length} poster)</span></div><span style="font-size:13px;font-weight:700;color:#dc2626">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Dato</th><th>Beskrivelse</th><th>Kategori</th><th style="text-align:right">Beløp</th><th>Referanse</th><th>Måned</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen utlegg å vise</div>':''}</div>`;
+}
+
+function renderFakturaer(){
+  const list=S.filterManed==='alle'?S.fakturaer:S.fakturaer.filter(f=>f.maned===S.filterManed);
+  const tot=list.reduce((s,f)=>s+f.netto,0);
+  const now=new Date();now.setHours(0,0,0,0);
+  const rows=list.map((f,i)=>{
+    const paid=f.betalt==='Ja';
+    const ov=f.forfallsdato&&new Date(f.forfallsdato)<now&&!paid;
+    return`<tr style="background:${paid?'#f0fdf4':i%2?'#fafafa':'white'}">
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturanr" data-ft="text" style="color:#94a3b8">${esc(f.fakturanr)||'—'}</td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="kunde" data-ft="text" style="font-weight:500;color:#0f172a">${esc(f.kunde)||'—'}</td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturadato" data-ft="date">${esc(f.fakturadato)||'—'}</td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="forfallsdato" data-ft="date" style="color:${ov?'#dc2626':'#374151'};font-weight:${ov?600:400}">${esc(f.forfallsdato)||'—'}</td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturabelop" data-ft="number" style="text-align:right">${nok(f.fakturabelop)}</td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="netto" data-ft="number" style="text-align:right;font-weight:600;color:#3b82f6">${nok(f.netto)}</td>
+      <td><span class="badge ${paid?'badge-ja':'badge-nei'}" data-toggle="${f.id}">${esc(f.betalt)}</span></td>
+      <td class="editable" data-dt="f" data-id="${f.id}" data-f="betalingsdato" data-ft="date" style="color:#94a3b8;font-size:12px">${esc(f.betalingsdato)||'—'}</td>
+      <td style="text-align:right"><button class="btn-del" onclick="delItem('f','${f.id}')">✕</button></td>
+    </tr>`;
+  }).join('');
+  return`<div class="card"><div class="card-hdr"><div><span class="card-title">Fakturaregister</span> <span class="card-sub">(${list.length} fakturaer)</span></div><span style="font-size:13px;font-weight:700;color:#3b82f6">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Nr.</th><th>Kunde</th><th>Fakturadato</th><th>Forfall</th><th style="text-align:right">Fakturert</th><th style="text-align:right">Netto</th><th>Betalt ↕</th><th>Betalingsdato</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen fakturaer å vise</div>':''}</div>`;
+}
+
+function renderImport(){
+  const opts=[['auto','🤖 Automatisk'],['utlegg','💸 Utlegg'],['fakturaer','🧾 Fakturaer']];
+  const optHtml=opts.map(([v,l])=>`<button class="imp-opt${S.impTarget===v?' active':''}" onclick="S.impTarget='${v}';render()">${l}</button>`).join('');
+  const logHtml=S.impLog.length?`<div class="card"><button class="log-toggle" onclick="S.showLog=!S.showLog;render()">📋 Importlogg (${S.impLog.length}) <span>${S.showLog?'▲':'▼'}</span></button>${S.showLog?S.impLog.map(l=>`<div class="log-row"><span class="${l.s==='ok'?'log-ok':l.s==='err'?'log-err':'log-warn'}">${l.s==='ok'?'✓':l.s==='err'?'✗':'⚠'}</span><span style="font-weight:500">${esc(l.n)}</span><span style="color:#94a3b8">${esc(l.m)}</span><span class="log-time">${l.t}</span></div>`).join(''):''}</div>`:'';
+  return`<div style="display:flex;flex-direction:column;gap:14px">
+    <div class="imp-opts"><span style="font-size:13px;font-weight:600;color:#475569;flex-shrink:0">Importer til:</span>${optHtml}<span style="font-size:12px;color:#94a3b8">Automatisk gjetter basert på kolonner</span></div>
+    <div class="drop-zone" id="dropZone" ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)" onclick="document.getElementById('fInp').click()">
+      <div class="dz-icon">📂</div>
+      <div class="dz-h">Slipp filer her eller klikk for å velge</div>
+      <div class="dz-sub"><span class="fmt fmt-csv">CSV</span> · <span class="fmt fmt-pdf">PDF</span> · <span class="fmt fmt-img">Bilder ✨ AI-utlesning</span></div>
+      <input type="file" id="fInp" multiple accept=".csv,.pdf,.png,.jpg,.jpeg,.gif,.webp,.heic" style="display:none" onchange="handleFiles(this)">
+    </div>
+    <div class="card"><div class="card-hdr"><div class="card-title">📋 Forventede kolonnenavn (CSV)</div></div>
+      <div class="ig-grid">
+        <div class="ig-col"><div class="ig-type" style="color:#dc2626">💸 UTLEGG</div>${[['Dato','dato, date'],['Beskrivelse','beskrivelse, name, tekst'],['Kategori','kategori, category, type'],['Beløp','beløp, belop, amount, sum'],['Referanse','referanse, ref']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
+        <div class="ig-col"><div class="ig-type" style="color:#3b82f6">🧾 FAKTURAER</div>${[['Fakturanr.','fakturanr, invoice, nr'],['Kunde','kunde, customer, client'],['Fakturadato','fakturadato, dato, date'],['Fakturabeløp','faktura, amount, belop'],['Netto','netto, net'],['Betalt','betalt, paid, status']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
+      </div>
+    </div>
+    ${logHtml}
+  </div>`;
+}
+
+function bindCells(){
+  document.querySelectorAll('.editable').forEach(td=>td.addEventListener('click',()=>startEdit(td)));
+  document.querySelectorAll('[data-toggle]').forEach(el=>el.addEventListener('click',()=>toggleBetalt(el.dataset.toggle)));
+}
+
+function startEdit(td){
+  const{dt,id,f,ft,opts}=td.dataset;
+  const item=(dt==='u'?S.utlegg:S.fakturaer).find(x=>x.id===id);if(!item)return;
+  let el;
+  if(ft==='select'){el=document.createElement('select');el.className='inline-sel';(opts||'').split('|').forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o;if(o===item[f])op.selected=true;el.appendChild(op);});}
+  else{el=document.createElement('input');el.className='inline-inp';el.type=ft||'text';el.value=item[f]||'';}
+  const commit=()=>{const v=ft==='number'?(parseFloat(el.value)||0):el.value;patch(dt,id,f,v);render();};
+  el.addEventListener('blur',commit);
+  el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key==='Escape')el.blur();});
+  td.innerHTML='';td.appendChild(el);el.focus();
+}
+
+function patch(dt,id,field,val){
+  let updated;
+  if(dt==='u'){S.utlegg=S.utlegg.map(u=>{if(u.id!==id)return u;const x={...u,[field]:val};if(field==='dato')x.maned=getManed(val);updated=x;return x;});}
+  else{S.fakturaer=S.fakturaer.map(f=>{if(f.id!==id)return f;const x={...f,[field]:val};if(field==='fakturadato')x.maned=getManed(val);if(field==='betalt'&&val==='Ja'&&!x.betalingsdato)x.betalingsdato=today();if(field==='betalt'&&val==='Nei')x.betalingsdato='';updated=x;return x;});}
+  if(updated){setSyncStatus('☁️ Lagrer...');sbUpsert(dt==='u'?'utlegg':'fakturaer',updated);}
+}
+
+function toggleBetalt(id){const f=S.fakturaer.find(x=>x.id===id);if(!f)return;patch('f',id,'betalt',f.betalt==='Ja'?'Nei':'Ja');render();}
+
+function delItem(dt,id){
+  if(!confirm('Slett denne posten?'))return;
+  if(dt==='u')S.utlegg=S.utlegg.filter(x=>x.id!==id);else S.fakturaer=S.fakturaer.filter(x=>x.id!==id);
+  setSyncStatus('☁️ Lagrer...');sbDelete(dt==='u'?'utlegg':'fakturaer',id);render();toast('Slettet');
+}
+
+function openAddU(){
+  S.euId=null;document.getElementById('euTitle').textContent='💸 Legg til utlegg';
+  document.getElementById('eu-kat').innerHTML=KATEGORIER.map(k=>`<option>${k}</option>`).join('');
+  document.getElementById('eu-dato').value=today();
+  ['eu-besk','eu-belop','eu-ref'].forEach(id=>document.getElementById(id).value='');
+  openModal('euModal');
+}
+function saveUtlegg(){
+  const dato=document.getElementById('eu-dato').value,besk=document.getElementById('eu-besk').value.trim();
+  if(!dato||!besk){toast('Fyll ut dato og beskrivelse');return;}
+  const u={id:S.euId||uid(),dato,beskrivelse:besk,kategori:document.getElementById('eu-kat').value,belop:parseFloat(document.getElementById('eu-belop').value)||0,referanse:document.getElementById('eu-ref').value.trim(),maned:getManed(dato)};
+  if(S.euId)S.utlegg=S.utlegg.map(x=>x.id===S.euId?u:x);else S.utlegg.push(u);
+  setSyncStatus('☁️ Lagrer...');sbUpsert('utlegg',u);closeModal('euModal');render();toast(S.euId?'Oppdatert':'Utlegg lagt til');
+}
+
+function openAddF(){
+  S.efId=null;document.getElementById('efTitle').textContent='🧾 Legg til faktura';
+  const maxNr=Math.max(0,...S.fakturaer.map(f=>parseInt(f.fakturanr)||0));
+  document.getElementById('ef-nr').value=String(maxNr+1);
+  ['ef-kunde','ef-forfall','ef-belop','ef-netto','ef-betalingsdato'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ef-dato').value=today();document.getElementById('ef-betalt').value='Nei';
+  openModal('efModal');
+}
+function saveFaktura(){
+  const dato=document.getElementById('ef-dato').value,kunde=document.getElementById('ef-kunde').value.trim();
+  if(!dato||!kunde){toast('Fyll ut dato og kunde');return;}
+  const belop=parseFloat(document.getElementById('ef-belop').value)||0;
+  const f={id:S.efId||uid(),fakturanr:document.getElementById('ef-nr').value.trim(),kunde,fakturadato:dato,forfallsdato:document.getElementById('ef-forfall').value||null,fakturabelop:belop,netto:parseFloat(document.getElementById('ef-netto').value)||belop,betalt:document.getElementById('ef-betalt').value,betalingsdato:document.getElementById('ef-betalingsdato').value||null,maned:getManed(dato)};
+  if(S.efId)S.fakturaer=S.fakturaer.map(x=>x.id===S.efId?f:x);else S.fakturaer.push(f);
+  setSyncStatus('☁️ Lagrer...');sbUpsert('fakturaer',f);closeModal('efModal');render();toast(S.efId?'Oppdatert':'Faktura lagt til');
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function dzOver(ev){ev.preventDefault();document.getElementById('dropZone')?.classList.add('over');}
+function dzLeave(){document.getElementById('dropZone')?.classList.remove('over');}
+function dzDrop(ev){ev.preventDefault();dzLeave();Array.from(ev.dataTransfer.files).forEach(processFile);}
+function handleFiles(inp){Array.from(inp.files).forEach(processFile);inp.value='';}
+function logEntry(n,s,m){S.impLog.unshift({n,s,m,t:new Date().toLocaleTimeString('nb-NO')});}
+
+function processFile(file){
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){
+    const r=new FileReader();
+    r.onload=ev=>{
+      try{
+        const lines=ev.target.result.trim().split('\n').filter(Boolean);
+        if(lines.length<2){logEntry(file.name,'warn','Ingen data');S.showLog=true;render();return;}
+        const sep=lines[0].includes(';')?';':',';
+        const hdrs=lines[0].split(sep).map(h=>h.replace(/^"|"$/g,'').trim());
+        const rows=lines.slice(1).map(l=>{const cs=l.split(sep).map(c=>c.replace(/^"|"$/g,'').trim());const o={};hdrs.forEach((h,i)=>o[h]=cs[i]||'');return o;});
+        const hasKunde=hdrs.some(h=>h.toLowerCase().includes('kunde'));
+        const tgt=S.impTarget==='auto'?(hasKunde?'fakturaer':'utlegg'):S.impTarget;
+        if(tgt==='fakturaer'){const p=rows.map(csvToF).filter(f=>f.kunde);S.fakturaer=[...S.fakturaer,...p];sbUpsertMany('fakturaer',p);logEntry(file.name,'ok',p.length+' fakturaer importert');}
+        else{const p=rows.map(csvToU).filter(u=>u.beskrivelse);S.utlegg=[...S.utlegg,...p];sbUpsertMany('utlegg',p);logEntry(file.name,'ok',p.length+' utlegg importert');}
+        S.showLog=true;render();
+      }catch(err){logEntry(file.name,'err','Feil: '+err.message);S.showLog=true;render();}
+    };r.readAsText(file,'utf-8');
+  } else if(['png','jpg','jpeg','gif','webp','heic'].includes(ext)){
+    const r=new FileReader();
+    r.onload=ev=>{const base64=ev.target.result.split(',')[1];const mimeType=file.type||'image/jpeg';S.bp={url:`data:${mimeType};base64,${base64}`,type:S.impTarget==='auto'?'fakturaer':S.impTarget,file:file.name,rows:[],base64,mimeType};showBP();};
+    r.readAsDataURL(file);logEntry(file.name,'ok','Bilde åpnet for import');
+  } else if(ext==='pdf'){
+    const tgt=S.impTarget==='auto'?'fakturaer':S.impTarget;
+    if(tgt==='fakturaer'){const f={id:uid(),fakturanr:'',kunde:'PDF – '+file.name,fakturadato:today(),forfallsdato:null,fakturabelop:0,netto:0,betalt:'Nei',betalingsdato:null,maned:getManed(today())};S.fakturaer.push(f);sbUpsert('fakturaer',f);}
+    else{const u={id:uid(),dato:today(),beskrivelse:'PDF – '+file.name,kategori:'Annet',belop:0,referanse:'',maned:getManed(today())};S.utlegg.push(u);sbUpsert('utlegg',u);}
+    logEntry(file.name,'ok','PDF lagt til – fyll inn detaljer');S.showLog=true;render();
+  } else{logEntry(file.name,'err','Filformat ikke støttet');S.showLog=true;render();}
+}
+
+function csvToU(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=String(g('dato','date')||today()).substring(0,10);return{id:uid(),dato,beskrivelse:String(g('beskr','desc','tekst','name','navn')||'').trim(),kategori:String(g('kat','cat','type','kategori')||'Annet').trim()||'Annet',belop:parseFloat(String(g('beløp','belop','amount','sum','total','pris')).replace(/[^\d.,-]/g,'').replace(',','.'))||0,referanse:String(g('ref','kv','voucher','referanse')||'').trim(),maned:getManed(dato)};}
+function csvToF(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=String(g('fakturadato','dato','date','issued')||today()).substring(0,10);const belop=parseFloat(String(g('faktura','amount','total','sum','belop','beløp')).replace(/[^\d.,-]/g,'').replace(',','.'))||0;return{id:uid(),fakturanr:String(g('fakturanr','invoice','nr','number')||'').trim(),kunde:String(g('kunde','customer','client','name','navn')||'').trim(),fakturadato:dato,forfallsdato:String(g('forfall','due')||'')||null,fakturabelop:belop,netto:parseFloat(String(g('netto','net')).replace(/[^\d.,-]/g,'').replace(',','.'))||belop,betalt:String(g('betalt','paid','status')||'Nei'),betalingsdato:String(g('betalingsdato','payment','paid_date')||'')||null,maned:getManed(dato)};}
+
+function showBP(){
+  document.getElementById('bpOverlay')?.remove();
+  const bp=S.bp;if(!bp)return;
+  const iF=bp.type==='fakturaer';
+  const addedList=bp.rows.map((r,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #1e293b"><span style="color:#94a3b8">${esc(iF?r.kunde:r.beskrivelse)||'—'}</span><div style="display:flex;align-items:center;gap:8px"><span style="color:#3b82f6;font-weight:600">${nok(iF?r.netto:r.belop)}</span><button onclick="bpRemRow(${i})" style="color:#ef4444;background:none;border:none;cursor:pointer;font-size:14px;line-height:1">✕</button></div></div>`).join('');
+  const form=iF?`<div class="form-row"><div class="fgrp"><label class="flbl">Fakturanr.</label><input class="finp" id="bp-nr" placeholder="10021"></div><div class="fgrp"><label class="flbl">Kunde</label><input class="finp" id="bp-kunde" placeholder="Leverandør AS"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="bp-forfall"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Netto</label><input type="number" class="finp" id="bp-netto" placeholder="0"></div></div><div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="bp-betalt"><option>Nei</option><option>Ja</option></select></div>`:`<div class="form-row"><div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="bp-kat">${KATEGORIER.map(k=>`<option>${k}</option>`).join('')}</select></div></div><div class="fgrp"><label class="flbl">Beskrivelse</label><input class="finp" id="bp-besk" placeholder="f.eks. Kvittering"></div><div class="form-row"><div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Referanse</label><input class="finp" id="bp-ref"></div></div>`;
+  const div=document.createElement('div');div.className='bp-overlay';div.id='bpOverlay';
+  div.innerHTML=`<div class="bp-left"><div class="bp-left-hdr"><span style="color:white;font-weight:600;font-size:14px">📷 ${esc(bp.file)}</span><span style="color:#64748b;font-size:12px">${bp.rows.length} rader lagt til</span></div><div class="bp-img-wrap"><img src="${bp.url}" alt="Import"></div>${bp.rows.length?`<div class="bp-added"><div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:6px;text-transform:uppercase">Lagt til (${bp.rows.length})</div>${addedList}</div>`:''}</div><div class="bp-right"><div class="bp-right-hdr"><div><div style="font-weight:600;color:#0f172a;font-size:15px">${iF?'🧾 Legg inn faktura':'💸 Legg inn utlegg'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">Fyll inn fra bildet til venstre</div></div><button onclick="closeBP()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8">&times;</button></div><div class="bp-form"><div class="ai-hint" id="aiHint"></div><button class="ai-btn" id="aiBtn" onclick="doAI()"><div class="ai-spin" id="aiSpin"></div>✨ Les av med AI automatisk</button>${form}</div><div class="bp-actions"><button onclick="bpAddRow()" style="padding:10px;font-size:13px;font-weight:600;background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe;border-radius:8px;cursor:pointer;font-family:inherit">+ Legg til rad og fortsett</button><button onclick="bpSaveAll()" style="padding:10px;font-size:13px;font-weight:600;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit">✓ Lagre alle (${bp.rows.length}) og lukk</button></div></div>`;
+  document.body.appendChild(div);
+}
+
+function bpGetRad(){
+  const iF=S.bp.type==='fakturaer';
+  if(iF){const belop=parseFloat(document.getElementById('bp-belop')?.value)||0;return{id:uid(),fakturanr:document.getElementById('bp-nr')?.value||'',kunde:document.getElementById('bp-kunde')?.value||'',fakturadato:document.getElementById('bp-dato')?.value||today(),forfallsdato:document.getElementById('bp-forfall')?.value||null,fakturabelop:belop,netto:parseFloat(document.getElementById('bp-netto')?.value)||belop,betalt:document.getElementById('bp-betalt')?.value||'Nei',betalingsdato:null,maned:getManed(document.getElementById('bp-dato')?.value||today())};}
+  return{id:uid(),dato:document.getElementById('bp-dato')?.value||today(),beskrivelse:document.getElementById('bp-besk')?.value||'',kategori:document.getElementById('bp-kat')?.value||'Annet',belop:parseFloat(document.getElementById('bp-belop')?.value)||0,referanse:document.getElementById('bp-ref')?.value||'',maned:getManed(document.getElementById('bp-dato')?.value||today())};
+}
+function bpAddRow(){const r=bpGetRad();const iF=S.bp.type==='fakturaer';if(!(iF?r.kunde:r.beskrivelse)){toast('Fyll ut minst leverandør/beskrivelse');return;}S.bp.rows.push(r);showBP();}
+function bpRemRow(i){S.bp.rows.splice(i,1);showBP();}
+function bpSaveAll(){
+  const bp=S.bp,last=bpGetRad(),iF=bp.type==='fakturaer';
+  let all=[...bp.rows];if(iF?last.kunde:last.beskrivelse)all.push(last);
+  if(!all.length){toast('Ingen rader å lagre');return;}
+  if(iF){const valid=all.filter(r=>r.kunde);S.fakturaer=[...S.fakturaer,...valid];sbUpsertMany('fakturaer',valid);}
+  else{const valid=all.filter(r=>r.beskrivelse);S.utlegg=[...S.utlegg,...valid];sbUpsertMany('utlegg',valid);}
+  closeBP();goTab(bp.type);toast(all.length+' poster lagret ✓');
+}
+function closeBP(){S.bp=null;document.getElementById('bpOverlay')?.remove();}
+
+async function doAI(){
+  const bp=S.bp;if(!bp)return;
+  const hint=document.getElementById('aiHint');
+  const apiKey=localStorage.getItem('dj_anthropic_key')||'';
+  if(!apiKey){if(hint){hint.textContent='Trenger Anthropic API-nøkkel. Klikk ⚙ øverst til høyre.';hint.style.background='#fef3c7';hint.style.borderColor='#fde68a';hint.style.color='#92400e';hint.classList.add('show');}return;}
+  const btn=document.getElementById('aiBtn');
+  if(btn){btn.disabled=true;btn.classList.add('loading');}
+  if(hint){hint.textContent='Analyserer bildet...';hint.style.background='#eff6ff';hint.style.borderColor='#bfdbfe';hint.style.color='#1d4ed8';hint.classList.add('show');}
+  try{
+    const iF=bp.type==='fakturaer';
+    const prompt=iF?`Du leser fakturainformasjon fra et bilde. Ekstrahér ALLE fakturaer og returner KUN et JSON-array:\n[{"fakturanr":"","kunde":"","fakturadato":"YYYY-MM-DD","forfallsdato":"YYYY-MM-DD eller null","fakturabelop":0,"netto":0,"betalt":"Nei"}]\nReturner bare arrayet.`:`Du leser kvitteringer fra et bilde. Ekstrahér alle poster:\n[{"beskrivelse":"","kategori":"Annet","dato":"YYYY-MM-DD","belop":0,"referanse":""}]\nReturner bare JSON-arrayet.`;
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1024,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:bp.mimeType,data:bp.base64}},{type:'text',text:prompt}]}]})});
+    if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error?.message||'API-feil '+res.status);}
+    const data=await res.json();const resStr=data.content[0].text;
+    const arrM=resStr.match(/\[[\s\S]*\]/),objM=resStr.match(/\{[\s\S]*\}/);
+    let items=[];
+    if(arrM){const p=JSON.parse(arrM[0]);items=Array.isArray(p)?p:[p];}else if(objM){items=[JSON.parse(objM[0])];}else throw new Error('Ingen data i svaret');
+    const newRows=items.map(d=>iF?{id:uid(),fakturanr:d.fakturanr||'',kunde:d.kunde||'',fakturadato:d.fakturadato&&d.fakturadato!=='null'?d.fakturadato:today(),forfallsdato:d.forfallsdato&&d.forfallsdato!=='null'?d.forfallsdato:null,fakturabelop:parseFloat(d.fakturabelop)||0,netto:parseFloat(d.netto||d.fakturabelop)||0,betalt:d.betalt||'Nei',betalingsdato:null,maned:getManed(d.fakturadato||today())}:{id:uid(),dato:d.dato&&d.dato!=='null'?d.dato:today(),beskrivelse:d.beskrivelse||'',kategori:d.kategori||'Annet',belop:parseFloat(d.belop)||0,referanse:d.referanse||'',maned:getManed(d.dato||today())});
+    S.bp.rows=[...S.bp.rows,...newRows];
+    if(hint){hint.textContent=`✅ ${newRows.length} ${iF?'faktura(er)':'post(er)'} lest av`;hint.classList.add('show');}
+    toast(`✨ ${newRows.length} poster funnet`);showBP();
+  }catch(err){if(hint){hint.textContent='Kunne ikke lese: '+err.message;}toast('AI-feil: '+err.message);}
+  finally{if(btn){btn.disabled=false;btn.classList.remove('loading');}}
+}
+
+function openSettings(){document.getElementById('settingsKey').value=localStorage.getItem('dj_anthropic_key')||'';openModal('settingsModal');}
+function saveSettings(){const k=document.getElementById('settingsKey').value.trim();if(k)localStorage.setItem('dj_anthropic_key',k);else localStorage.removeItem('dj_anthropic_key');closeModal('settingsModal');toast(k?'API-nøkkel lagret ✓':'API-nøkkel fjernet');}
+
+function toggleExportMenu(ev){ev.stopPropagation();document.getElementById('expMenu').classList.toggle('open');}
+document.addEventListener('click',()=>document.getElementById('expMenu')?.classList.remove('open'));
+function doExport(type){
+  const data=type==='utlegg'?S.utlegg:S.fakturaer;
+  if(!data.length){toast('Ingen data å eksportere');return;}
+  const keys=Object.keys(data[0]).filter(k=>k!=='id');
+  const csv=[keys,...data.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"'))].map(r=>r.join(';')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`DealJourney_${type}_${today()}.csv`;a.click();
+  document.getElementById('expMenu').classList.remove('open');toast('Eksportert');
+}
+
+function initMonths(){
+  const sel=document.getElementById('monthSel');
+  sel.innerHTML='<option value="alle">Alle måneder</option>';
+  MANEDER.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
+}
+
+loadData();
+</script>
+</body>
+</html>
