@@ -1184,11 +1184,11 @@ if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error
 const data=await res.json();const resStr=data.content[0].text;
 
 const cleanStr=resStr.replace(/```(?:json)?\s*/gi,'').replace(/```/g,'');
-        const arrM=cleanStr.match(/\[[\s\S]*\]/),objM=cleanStr.match(/\{[\s\S]*\}/);
+        const jsonStr=(function(s){const aS=s.indexOf('['),oS=s.indexOf('{');if(aS===-1&&oS===-1)return null;let st,op,cl;if(aS!==-1&&(oS===-1||aS<oS)){st=aS;op='[';cl=']';}else{st=oS;op='{';cl='}';}let d=0;for(let i=st;i<s.length;i++){if(s[i]===op)d++;else if(s[i]===cl){d--;if(d===0)return s.substring(st,i+1);}}return null;})(cleanStr);
 
 let items=[];
 
-if(arrM){const p=JSON.parse(arrM[0]);items=Array.isArray(p)?p:[p];}else if(objM){items=[JSON.parse(objM[0])];}else throw new Error('Ingen data i svaret');
+if(jsonStr){const p=JSON.parse(jsonStr);items=Array.isArray(p)?p:[p];}else throw new Error('Ingen data i svaret');
 
 const newRows=items.map(d=>iF?{id:uid(),fakturanr:d.fakturanr||'',kunde:d.kunde||'',fakturadato:d.fakturadato&&d.fakturadato!=='null'?d.fakturadato:today(),forfallsdato:d.forfallsdato&&d.forfallsdato!=='null'?d.forfallsdato:null,fakturabelop:parseFloat(d.fakturabelop)||0,netto:(()=>{const fb=parseFloat(d.fakturabelop)||0;const n=parseFloat(d.netto)||0;return n&&n!==fb?n:Math.round(fb/1.25*100)/100;})(),betalt:d.betalt||'Nei',betalingsdato:null,maned:getManed(d.fakturadato||today())}:{id:uid(),dato:d.dato&&d.dato!=='null'?d.dato:today(),beskrivelse:d.beskrivelse||'',kategori:d.kategori||'Annet',belop:parseFloat(d.belop)||0,referanse:d.referanse||'',maned:getManed(d.dato||today())});
 
