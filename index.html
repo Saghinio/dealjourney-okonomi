@@ -1177,7 +1177,7 @@ const iF=bp.type==='fakturaer';
 
 const prompt=iF?`Du leser fakturainformasjon fra et bilde. Ekstrahér ALLE fakturaer og returner KUN et JSON-array:\n[{"fakturanr":"","kunde":"","fakturadato":"YYYY-MM-DD","forfallsdato":"YYYY-MM-DD eller null","fakturabelop":0,"netto":0,"betalt":"Nei"}]\nReturner bare arrayet.`:`Du leser kvitteringer fra et bilde. Ekstrahér alle poster:\n[{"beskrivelse":"","kategori":"Annet","dato":"YYYY-MM-DD","belop":0,"referanse":""}]\nReturner bare JSON-arrayet.`;
 
-const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1024,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:bp.mimeType,data:bp.base64}},{type:'text',text:prompt}]}]})});
+const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4096,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:bp.mimeType,data:bp.base64}},{type:'text',text:prompt}]}]})});
 
 if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error?.message||'API-feil '+res.status);}
 
