@@ -8,7 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DealJourney AS – Faktura & Utlegg</title>
+<title>DealJourney AS â Faktura & Utlegg</title>
 
 <style>
 
@@ -269,7 +269,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="logo-name">DealJourney AS</div>
 
-<div class="logo-sub">Økonomi · <span class="sync-status" id="syncStatus">☁️ Kobler til...</span></div>
+<div class="logo-sub">Ãkonomi Â· <span class="sync-status" id="syncStatus">âï¸ Kobler til...</span></div>
 
 </div>
 
@@ -279,27 +279,27 @@ tr:hover td { background: #f0f9ff; }
 
 <select class="month-sel" id="monthSel" onchange="S.filterManed=this.value;render()">
 
-<option value="alle">Alle måneder</option>
+<option value="alle">Alle mÃ¥neder</option>
 
 </select>
 
 <div class="exp-wrap">
 
-<button class="btn btn-secondary" onclick="toggleExportMenu(event)">↑ Eksporter ▾</button>
+<button class="btn btn-secondary" onclick="toggleExportMenu(event)">â Eksporter â¾</button>
 
 <div class="exp-menu" id="expMenu">
 
 <div class="exp-mhdr">Eksporter</div>
 
-<button class="exp-item" onclick="doExport('utlegg')">📄 CSV – Utlegg</button>
+<button class="exp-item" onclick="doExport('utlegg')">ð CSV â Utlegg</button>
 
-<button class="exp-item" onclick="doExport('fakturaer')">📄 CSV – Fakturaer</button>
-
-</div>
+<button class="exp-item" onclick="doExport('fakturaer')">ð CSV â Fakturaer</button>
 
 </div>
 
-<button class="btn btn-secondary" onclick="openSettings()" title="API-nøkkel for AI">⚙</button>
+</div>
+
+<button class="btn btn-secondary" onclick="openSettings()" title="API-nÃ¸kkel for AI">â</button>
 
 <button class="btn btn-primary" id="addBtn" style="display:none" onclick="handleAdd()">+ Legg til</button>
 
@@ -309,13 +309,13 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="tabs">
 
-<button class="tab-btn" onclick="goTab('oversikt')">📊 Oversikt</button>
+<button class="tab-btn" onclick="goTab('oversikt')">ð Oversikt</button>
 
-<button class="tab-btn" onclick="goTab('utlegg')">💸 Utlegg</button>
+<button class="tab-btn" onclick="goTab('utlegg')">ð¸ Utlegg</button>
 
-<button class="tab-btn" onclick="goTab('fakturaer')">🧾 Fakturaer</button>
+<button class="tab-btn" onclick="goTab('fakturaer')">ð§¾ Fakturaer</button>
 
-<button class="tab-btn" onclick="goTab('import')">📂 Importer</button>
+<button class="tab-btn" onclick="goTab('import')">ð Importer</button>
 
 </div>
 
@@ -337,7 +337,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="modal">
 
-<div class="modal-hdr"><div class="modal-title" id="euTitle">💸 Legg til utlegg</div><button class="modal-x" onclick="closeModal('euModal')">&times;</button></div>
+<div class="modal-hdr"><div class="modal-title" id="euTitle">ð¸ Legg til utlegg</div><button class="modal-x" onclick="closeModal('euModal')">&times;</button></div>
 
 <div class="modal-body">
 
@@ -353,7 +353,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="form-row">
 
-<div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="eu-belop" placeholder="0"></div>
+<div class="fgrp"><label class="flbl">BelÃ¸p (NOK)</label><input type="number" class="finp" id="eu-belop" placeholder="0"></div>
 
 <div class="fgrp"><label class="flbl">Referanse</label><input type="text" class="finp" id="eu-ref" placeholder="Kvittering #001"></div>
 
@@ -371,7 +371,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="modal" style="max-width:560px">
 
-<div class="modal-hdr"><div class="modal-title" id="efTitle">🧾 Legg til faktura</div><button class="modal-x" onclick="closeModal('efModal')">&times;</button></div>
+<div class="modal-hdr"><div class="modal-title" id="efTitle">ð§¾ Legg til faktura</div><button class="modal-x" onclick="closeModal('efModal')">&times;</button></div>
 
 <div class="modal-body">
 
@@ -393,7 +393,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="form-row">
 
-<div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="ef-belop"></div>
+<div class="fgrp"><label class="flbl">FakturabelÃ¸p (NOK)</label><input type="number" class="finp" id="ef-belop"></div>
 
 <div class="fgrp"><label class="flbl">Netto fakturert</label><input type="number" class="finp" id="ef-netto"></div>
 
@@ -419,15 +419,15 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="modal" style="max-width:480px">
 
-<div class="modal-hdr"><div class="modal-title">⚙ Innstillinger – AI-utlesning</div><button class="modal-x" onclick="closeModal('settingsModal')">&times;</button></div>
+<div class="modal-hdr"><div class="modal-title">â Innstillinger â AI-utlesning</div><button class="modal-x" onclick="closeModal('settingsModal')">&times;</button></div>
 
 <div class="modal-body">
 
-<p style="font-size:13px;color:#475569;line-height:1.6">For å bruke <strong>✨ Les av med AI</strong> trenger du en Anthropic API-nøkkel. Lagres kun lokalt i nettleseren.</p>
+<p style="font-size:13px;color:#475569;line-height:1.6">For Ã¥ bruke <strong>â¨ Les av med AI</strong> trenger du en Anthropic API-nÃ¸kkel. Lagres kun lokalt i nettleseren.</p>
 
-<div class="fgrp"><label class="flbl">Anthropic API-nøkkel</label><input type="password" class="finp" id="settingsKey" placeholder="sk-ant-..."></div>
+<div class="fgrp"><label class="flbl">Anthropic API-nÃ¸kkel</label><input type="password" class="finp" id="settingsKey" placeholder="sk-ant-..."></div>
 
-<p style="font-size:12px;color:#94a3b8">Hent på <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#3b82f6">console.anthropic.com</a></p>
+<p style="font-size:12px;color:#94a3b8">Hent pÃ¥ <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#3b82f6">console.anthropic.com</a></p>
 
 </div>
 
@@ -441,7 +441,7 @@ tr:hover td { background: #f0f9ff; }
 
 <script>
 
-/* ── SUPABASE REST (no library needed) ───────────────────────── */
+/* ââ SUPABASE REST (no library needed) âââââââââââââââââââââââââ */
 
 const SB_URL = 'https://nxzkyesnjvgcvwyokwdm.supabase.co';
 
@@ -465,7 +465,7 @@ return r.json();
 
 async function sbUpsert(table,item){
 
-try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(item)});setSyncStatus('☁️ Lagret');}
+try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(item)});setSyncStatus('âï¸ Lagret');}
 
 catch(err){toast('Lagringsfeil: '+err.message);}
 
@@ -475,7 +475,7 @@ async function sbUpsertMany(table,items){
 
 if(!items.length)return;
 
-try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(items)});setSyncStatus('☁️ Lagret');}
+try{await sbFetch(table+'?on_conflict=id',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(items)});setSyncStatus('âï¸ Lagret');}
 
 catch(err){toast('Lagringsfeil: '+err.message);}
 
@@ -483,13 +483,13 @@ catch(err){toast('Lagringsfeil: '+err.message);}
 
 async function sbDelete(table,id){
 
-try{await sbFetch(table+'?id=eq.'+encodeURIComponent(id),{method:'DELETE'});setSyncStatus('☁️ Lagret');}
+try{await sbFetch(table+'?id=eq.'+encodeURIComponent(id),{method:'DELETE'});setSyncStatus('âï¸ Lagret');}
 
 catch(err){toast('Slettefeil: '+err.message);}
 
 }
 
-/* ── CONSTANTS ─────────────────────────────────────────────────── */
+/* ââ CONSTANTS âââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 let KATEGORIER=["Reise","Overnatting","Mat/Bevertning","Telefoni/Kommunikasjon","Programvare/SaaS","Abonnement","Konsulentjenester","Faglig utvikling","Diverse","Annet"];
 (()=>{try{JSON.parse(localStorage.getItem('egneKat')||'[]').forEach(c=>{if(c&&!KATEGORIER.includes(c))KATEGORIER.push(c);});}catch(e){}})();
@@ -578,11 +578,11 @@ const INIT_F=[
 
 ];
 
-/* ── STATE ──────────────────────────────────────────────────────── */
+/* ââ STATE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 let S={utlegg:[],fakturaer:[],tab:'oversikt',filterManed:'alle',impTarget:'auto',impLog:[],showLog:false,euId:null,efId:null,bp:null,impPreview:null};
 
-/* ── UTILS ──────────────────────────────────────────────────────── */
+/* ââ UTILS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 
@@ -597,11 +597,11 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
-/* ── LOAD DATA ───────────────────────────────────────────────────── */
+/* ââ LOAD DATA âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 async function loadData(){
 
-setSyncStatus('☁️ Laster...');
+setSyncStatus('âï¸ Laster...');
 
 try{
 
@@ -615,7 +615,7 @@ sbFetch('fakturaer?select=*&order=fakturadato.asc')
 
 if(!utleggData.length&&!fakturaData.length){
 
-setSyncStatus('☁️ Laster inn startdata...');
+setSyncStatus('âï¸ Laster inn startdata...');
 
 await Promise.all([sbUpsertMany('utlegg',INIT_U),sbUpsertMany('fakturaer',INIT_F)]);
 
@@ -629,11 +629,11 @@ S.fakturaer=fakturaData.map(f=>({...f,fakturabelop:parseFloat(f.fakturabelop)||0
 
 }
 
-setSyncStatus('☁️ Synkronisert');
+setSyncStatus('âï¸ Synkronisert');
 
 }catch(err){
 
-setSyncStatus('⚠️ Tilkoblingsfeil');
+setSyncStatus('â ï¸ Tilkoblingsfeil');
 
 toast('Kunne ikke laste data: '+err.message);
 
@@ -645,7 +645,7 @@ initMonths();goTab('oversikt');
 
 }
 
-/* ── TABS ─────────────────────────────────────────────────────────── */
+/* ââ TABS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 function goTab(tab){
 
@@ -667,7 +667,7 @@ render();
 
 function handleAdd(){S.tab==='utlegg'?openAddU():openAddF();}
 
-/* ── RENDER ───────────────────────────────────────────────────────── */
+/* ââ RENDER âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 function render(){
 
@@ -703,9 +703,9 @@ const kpis=[
 
 {l:'Betalt inn',v:nok(tB),s:S.fakturaer.filter(f=>f.betalt==='Ja').length+' fakturaer',c:'#16a34a'},
 
-{l:'Utestående',v:nok(tO),s:S.fakturaer.filter(f=>f.betalt!=='Ja').length+' fakturaer',c:'#f59e0b'},
+{l:'UtestÃ¥ende',v:nok(tO),s:S.fakturaer.filter(f=>f.betalt!=='Ja').length+' fakturaer',c:'#f59e0b'},
 
-{l:'Netto resultat',v:nok(tR),s:'betalt inn – utlegg',c:tR>=0?'#16a34a':'#dc2626'},
+{l:'Netto resultat',v:nok(tR),s:'betalt inn â utlegg',c:tR>=0?'#16a34a':'#dc2626'},
 
 ];
 
@@ -723,11 +723,11 @@ if(!mu&&!mf)return'';
 
 const mn=mb-mu;
 
-return`<tr class="mth-row"><td>${m}</td><td style="text-align:right;color:#dc2626">${mu?nok(mu):'—'}</td><td style="text-align:right;color:#3b82f6">${mf?nok(mf):'—'}</td><td style="text-align:right;color:#16a34a">${mb?nok(mb):'—'}</td><td style="text-align:right;font-weight:600;color:${mn>=0?'#16a34a':'#dc2626'}">${nok(mn)}</td></tr>`;
+return`<tr class="mth-row"><td>${m}</td><td style="text-align:right;color:#dc2626">${mu?nok(mu):'â'}</td><td style="text-align:right;color:#3b82f6">${mf?nok(mf):'â'}</td><td style="text-align:right;color:#16a34a">${mb?nok(mb):'â'}</td><td style="text-align:right;font-weight:600;color:${mn>=0?'#16a34a':'#dc2626'}">${nok(mn)}</td></tr>`;
 
 }).join('');
 
-const mthHtml=`<div class="card"><div class="card-hdr"><div class="card-title">Månedlig oversikt</div></div><div class="table-scroll"><table><thead><tr><th>Måned</th><th style="text-align:right">Utlegg</th><th style="text-align:right">Netto fakturert</th><th style="text-align:right">Betalt inn</th><th style="text-align:right">Netto</th></tr></thead><tbody>${mRows}<tr class="mth-tot"><td>TOTALT</td><td style="text-align:right;color:#dc2626">${nok(tU)}</td><td style="text-align:right;color:#3b82f6">${nok(tN)}</td><td style="text-align:right;color:#16a34a">${nok(tB)}</td><td style="text-align:right;color:${tR>=0?'#16a34a':'#dc2626'}">${nok(tR)}</td></tr></tbody></table></div></div>`;
+const mthHtml=`<div class="card"><div class="card-hdr"><div class="card-title">MÃ¥nedlig oversikt</div></div><div class="table-scroll"><table><thead><tr><th>MÃ¥ned</th><th style="text-align:right">Utlegg</th><th style="text-align:right">Netto fakturert</th><th style="text-align:right">Betalt inn</th><th style="text-align:right">Netto</th></tr></thead><tbody>${mRows}<tr class="mth-tot"><td>TOTALT</td><td style="text-align:right;color:#dc2626">${nok(tU)}</td><td style="text-align:right;color:#3b82f6">${nok(tN)}</td><td style="text-align:right;color:#16a34a">${nok(tB)}</td><td style="text-align:right;color:${tR>=0?'#16a34a':'#dc2626'}">${nok(tR)}</td></tr></tbody></table></div></div>`;
 
 const catMap={};S.utlegg.forEach(u=>catMap[u.kategori]=(catMap[u.kategori]||0)+u.belop);
 
@@ -735,9 +735,9 @@ const catHtml=Object.entries(catMap).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div c
 
 const outF=S.fakturaer.filter(f=>f.betalt!=='Ja');
 
-const outHtml=outF.length?outF.map(f=>`<div class="cat-row"><span>${esc(f.kunde)}</span><span style="font-weight:600;color:#f59e0b">${nok(f.netto)}</span></div>`).join(''):`<div class="empty">Ingen utestående fakturaer 🎉</div>`;
+const outHtml=outF.length?outF.map(f=>`<div class="cat-row"><span>${esc(f.kunde)}</span><span style="font-weight:600;color:#f59e0b">${nok(f.netto)}</span></div>`).join(''):`<div class="empty">Ingen utestÃ¥ende fakturaer ð</div>`;
 
-return kpiHtml+mthHtml+`<div class="two-col"><div class="card"><div class="card-hdr"><div class="card-title">Utlegg per kategori</div></div>${catHtml}</div><div class="card"><div class="card-hdr"><div class="card-title">Utestående fakturaer</div></div>${outHtml}</div></div>`;
+return kpiHtml+mthHtml+`<div class="two-col"><div class="card"><div class="card-hdr"><div class="card-title">Utlegg per kategori</div></div>${catHtml}</div><div class="card"><div class="card-hdr"><div class="card-title">UtestÃ¥ende fakturaer</div></div>${outHtml}</div></div>`;
 
 }
 
@@ -749,7 +749,7 @@ const tot=list.reduce((s,u)=>s+u.belop,0);
 
 const rows=list.map((u,i)=>`<tr style="background:${i%2?'#fafafa':'white'}">
 
-<td class="editable" data-dt="u" data-id="${u.id}" data-f="dato" data-ft="date">${esc(u.dato)||'—'}</td>
+<td class="editable" data-dt="u" data-id="${u.id}" data-f="dato" data-ft="date">${esc(u.dato)||'â'}</td>
 
 <td class="editable" data-dt="u" data-id="${u.id}" data-f="beskrivelse" data-ft="text" style="font-weight:500;color:#0f172a">${esc(u.beskrivelse)||'<em style="color:#94a3b8">Tom</em>'}</td>
 
@@ -757,15 +757,15 @@ const rows=list.map((u,i)=>`<tr style="background:${i%2?'#fafafa':'white'}">
 
 <td class="editable" data-dt="u" data-id="${u.id}" data-f="belop" data-ft="number" style="text-align:right;font-weight:600;color:#dc2626">${nok(u.belop)}</td>
 
-<td class="editable" data-dt="u" data-id="${u.id}" data-f="referanse" data-ft="text" style="color:#94a3b8;font-size:12px">${esc(u.referanse)||'—'}</td>
+<td class="editable" data-dt="u" data-id="${u.id}" data-f="referanse" data-ft="text" style="color:#94a3b8;font-size:12px">${esc(u.referanse)||'â'}</td>
 
 <td style="color:#94a3b8;font-size:12px">${esc(u.maned)}</td>
 
-<td style="text-align:right"><button class="btn-del" onclick="delItem('u','${u.id}')">✕</button></td>
+<td style="text-align:right"><button class="btn-del" onclick="delItem('u','${u.id}')">â</button></td>
 
 </tr>`).join('');
 
-return`<div class="card"><div class="card-hdr"><div><span class="card-title">Utleggsregister</span> <span class="card-sub">(${list.length} poster)</span></div><span style="font-size:13px;font-weight:700;color:#dc2626">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Dato</th><th>Beskrivelse</th><th>Kategori</th><th style="text-align:right">Beløp</th><th>Referanse</th><th>Måned</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen utlegg å vise</div>':''}</div>`;
+return`<div class="card"><div class="card-hdr"><div><span class="card-title">Utleggsregister</span> <span class="card-sub">(${list.length} poster)</span></div><span style="font-size:13px;font-weight:700;color:#dc2626">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Dato</th><th>Beskrivelse</th><th>Kategori</th><th style="text-align:right">BelÃ¸p</th><th>Referanse</th><th>MÃ¥ned</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen utlegg Ã¥ vise</div>':''}</div>`;
 
 }
 
@@ -785,13 +785,13 @@ const ov=f.forfallsdato&&new Date(f.forfallsdato)<now&&!paid;
 
 return`<tr style="background:${paid?'#f0fdf4':i%2?'#fafafa':'white'}">
 
-<td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturanr" data-ft="text" style="color:#94a3b8">${esc(f.fakturanr)||'—'}</td>
+<td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturanr" data-ft="text" style="color:#94a3b8">${esc(f.fakturanr)||'â'}</td>
 
-<td class="editable" data-dt="f" data-id="${f.id}" data-f="kunde" data-ft="text" style="font-weight:500;color:#0f172a">${esc(f.kunde)||'—'}</td>
+<td class="editable" data-dt="f" data-id="${f.id}" data-f="kunde" data-ft="text" style="font-weight:500;color:#0f172a">${esc(f.kunde)||'â'}</td>
 
-<td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturadato" data-ft="date">${esc(f.fakturadato)||'—'}</td>
+<td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturadato" data-ft="date">${esc(f.fakturadato)||'â'}</td>
 
-<td class="editable" data-dt="f" data-id="${f.id}" data-f="forfallsdato" data-ft="date" style="color:${ov?'#dc2626':'#374151'};font-weight:${ov?600:400}">${esc(f.forfallsdato)||'—'}</td>
+<td class="editable" data-dt="f" data-id="${f.id}" data-f="forfallsdato" data-ft="date" style="color:${ov?'#dc2626':'#374151'};font-weight:${ov?600:400}">${esc(f.forfallsdato)||'â'}</td>
 
 <td class="editable" data-dt="f" data-id="${f.id}" data-f="fakturabelop" data-ft="number" style="text-align:right">${nok(f.fakturabelop)}</td>
 
@@ -799,15 +799,15 @@ return`<tr style="background:${paid?'#f0fdf4':i%2?'#fafafa':'white'}">
 
 <td><span class="badge ${paid?'badge-ja':'badge-nei'}" data-toggle="${f.id}">${esc(f.betalt)}</span></td>
 
-<td class="editable" data-dt="f" data-id="${f.id}" data-f="betalingsdato" data-ft="date" style="color:#94a3b8;font-size:12px">${esc(f.betalingsdato)||'—'}</td>
+<td class="editable" data-dt="f" data-id="${f.id}" data-f="betalingsdato" data-ft="date" style="color:#94a3b8;font-size:12px">${esc(f.betalingsdato)||'â'}</td>
 
-<td style="text-align:right"><button class="btn-del" onclick="delItem('f','${f.id}')">✕</button></td>
+<td style="text-align:right"><button class="btn-del" onclick="delItem('f','${f.id}')">â</button></td>
 
 </tr>`;
 
 }).join('');
 
-return`<div class="card"><div class="card-hdr"><div><span class="card-title">Fakturaregister</span> <span class="card-sub">(${list.length} fakturaer)</span></div><span style="font-size:13px;font-weight:700;color:#3b82f6">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Nr.</th><th>Kunde</th><th>Fakturadato</th><th>Forfall</th><th style="text-align:right">Fakturert</th><th style="text-align:right">Netto</th><th>Betalt ↕</th><th>Betalingsdato</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen fakturaer å vise</div>':''}</div>`;
+return`<div class="card"><div class="card-hdr"><div><span class="card-title">Fakturaregister</span> <span class="card-sub">(${list.length} fakturaer)</span></div><span style="font-size:13px;font-weight:700;color:#3b82f6">${nok(tot)}</span></div><div class="table-scroll"><table><thead><tr><th>Nr.</th><th>Kunde</th><th>Fakturadato</th><th>Forfall</th><th style="text-align:right">Fakturert</th><th style="text-align:right">Netto</th><th>Betalt â</th><th>Betalingsdato</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>${!list.length?'<div class="empty">Ingen fakturaer Ã¥ vise</div>':''}</div>`;
 
 }
 
@@ -825,51 +825,51 @@ const allChecked=prev.items.every(x=>x._checked);
 
 const rows=prev.items.map(x=>{
 
-if(iF){return`<tr class="${x._checked?'':'unchecked'}"><td><input type="checkbox" ${x._checked?'checked':''} onchange="togglePreviewRow(${x._idx},this.checked)"></td><td>${esc(x.fakturadato)}</td><td style="font-weight:500">${esc(x.kunde)}</td><td style="color:#94a3b8;font-size:12px">${esc(x.fakturanr)||'—'}</td><td style="text-align:right;font-weight:600;color:#3b82f6">${nok(x.fakturabelop)}</td></tr>`;}
+if(iF){return`<tr class="${x._checked?'':'unchecked'}"><td><input type="checkbox" ${x._checked?'checked':''} onchange="togglePreviewRow(${x._idx},this.checked)"></td><td>${esc(x.fakturadato)}</td><td style="font-weight:500">${esc(x.kunde)}</td><td style="color:#94a3b8;font-size:12px">${esc(x.fakturanr)||'â'}</td><td style="text-align:right;font-weight:600;color:#3b82f6">${nok(x.fakturabelop)}</td></tr>`;}
 
 return`<tr class="${x._checked?'':'unchecked'}"><td><input type="checkbox" ${x._checked?'checked':''} onchange="togglePreviewRow(${x._idx},this.checked)"></td><td>${esc(x.dato)}</td><td style="font-weight:500">${esc(x.beskrivelse)}</td><td><select class="kat-sel" onchange="prevEditKat(${x._idx},this.value)">${KATEGORIER.map(k=>`<option${k===x.kategori?' selected':''}>${k}</option>`).join('')}</select></td><td style="text-align:right;font-weight:600;color:#dc2626">${nok(x.belop)}</td></tr>`;
 
 }).join('');
 
-const thead=iF?`<tr><th><input type="checkbox" ${allChecked?'checked':''} onchange="toggleAllPreview(this.checked)"></th><th>Dato</th><th>Kunde</th><th>Nr.</th><th style="text-align:right">Beløp</th></tr>`:`<tr><th><input type="checkbox" ${allChecked?'checked':''} onchange="toggleAllPreview(this.checked)"></th><th>Dato</th><th>Beskrivelse</th><th>Kategori</th><th style="text-align:right">Beløp</th></tr>`;
+const thead=iF?`<tr><th><input type="checkbox" ${allChecked?'checked':''} onchange="toggleAllPreview(this.checked)"></th><th>Dato</th><th>Kunde</th><th>Nr.</th><th style="text-align:right">BelÃ¸p</th></tr>`:`<tr><th><input type="checkbox" ${allChecked?'checked':''} onchange="toggleAllPreview(this.checked)"></th><th>Dato</th><th>Beskrivelse</th><th>Kategori</th><th style="text-align:right">BelÃ¸p</th></tr>`;
 
-return`<div class="prev-wrap"><div class="prev-hdr"><div><span style="font-weight:600;font-size:14px">📋 Forhåndsvisning – ${esc(prev.fileName)}</span><span style="color:#94a3b8;font-size:12px;margin-left:8px">${prev.items.length} rader funnet</span></div><button onclick="cancelPreview()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:20px;line-height:1">&times;</button></div><div class="table-scroll"><table class="prev-tbl"><thead>${thead}</thead><tbody>${rows}</tbody></table></div><div class="prev-foot"><span style="font-size:13px;color:#475569"><strong>${checked.length}</strong> av ${prev.items.length} valgt &nbsp;·&nbsp; <strong style="color:${iF?'#3b82f6':'#dc2626'}">${nok(total)}</strong></span><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="cancelPreview()">Avbryt</button><button class="btn btn-primary" onclick="confirmImport()" ${!checked.length?'disabled':''}>✓ Importer ${checked.length} ${iF?'fakturaer':'utlegg'}</button></div></div></div>`;
+return`<div class="prev-wrap"><div class="prev-hdr"><div><span style="font-weight:600;font-size:14px">ð ForhÃ¥ndsvisning â ${esc(prev.fileName)}</span><span style="color:#94a3b8;font-size:12px;margin-left:8px">${prev.items.length} rader funnet</span></div><button onclick="cancelPreview()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:20px;line-height:1">&times;</button></div><div class="table-scroll"><table class="prev-tbl"><thead>${thead}</thead><tbody>${rows}</tbody></table></div><div class="prev-foot"><span style="font-size:13px;color:#475569"><strong>${checked.length}</strong> av ${prev.items.length} valgt &nbsp;Â·&nbsp; <strong style="color:${iF?'#3b82f6':'#dc2626'}">${nok(total)}</strong></span><div style="display:flex;gap:8px"><button class="btn btn-secondary" onclick="cancelPreview()">Avbryt</button><button class="btn btn-primary" onclick="confirmImport()" ${!checked.length?'disabled':''}>â Importer ${checked.length} ${iF?'fakturaer':'utlegg'}</button></div></div></div>`;
 
 }
 
 function renderImport(){
 
-const opts=[['auto','🤖 Automatisk'],['utlegg','💸 Utlegg'],['fakturaer','🧾 Fakturaer']];
+const opts=[['auto','ð¤ Automatisk'],['utlegg','ð¸ Utlegg'],['fakturaer','ð§¾ Fakturaer']];
 
 const optHtml=opts.map(([v,l])=>`<button class="imp-opt${S.impTarget===v?' active':''}" onclick="S.impTarget='${v}';render()">${l}</button>`).join('');
 
-const logHtml=S.impLog.length?`<div class="card"><button class="log-toggle" onclick="S.showLog=!S.showLog;render()">📋 Importlogg (${S.impLog.length}) <span>${S.showLog?'▲':'▼'}</span></button>${S.showLog?S.impLog.map(l=>`<div class="log-row"><span class="${l.s==='ok'?'log-ok':l.s==='err'?'log-err':'log-warn'}">${l.s==='ok'?'✓':l.s==='err'?'✗':'⚠'}</span><span style="font-weight:500">${esc(l.n)}</span><span style="color:#94a3b8">${esc(l.m)}</span><span class="log-time">${l.t}</span></div>`).join(''):''}</div>`:'';
+const logHtml=S.impLog.length?`<div class="card"><button class="log-toggle" onclick="S.showLog=!S.showLog;render()">ð Importlogg (${S.impLog.length}) <span>${S.showLog?'â²':'â¼'}</span></button>${S.showLog?S.impLog.map(l=>`<div class="log-row"><span class="${l.s==='ok'?'log-ok':l.s==='err'?'log-err':'log-warn'}">${l.s==='ok'?'â':l.s==='err'?'â':'â '}</span><span style="font-weight:500">${esc(l.n)}</span><span style="color:#94a3b8">${esc(l.m)}</span><span class="log-time">${l.t}</span></div>`).join(''):''}</div>`:'';
 
 const prevHtml=renderPreviewSection();
 
 return`<div style="display:flex;flex-direction:column;gap:14px">
 
-<div class="imp-opts"><span style="font-size:13px;font-weight:600;color:#475569;flex-shrink:0">Importer til:</span>${optHtml}<span style="font-size:12px;color:#94a3b8">Automatisk gjetter basert på kolonner</span></div>
+<div class="imp-opts"><span style="font-size:13px;font-weight:600;color:#475569;flex-shrink:0">Importer til:</span>${optHtml}<span style="font-size:12px;color:#94a3b8">Automatisk gjetter basert pÃ¥ kolonner</span></div>
 
 ${prevHtml?prevHtml:`<div class="drop-zone" id="dropZone" ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)" onclick="document.getElementById('fInp').click()">
 
-<div class="dz-icon">📂</div>
+<div class="dz-icon">ð</div>
 
-<div class="dz-h">Slipp filer her eller klikk for å velge</div>
+<div class="dz-h">Slipp filer her eller klikk for Ã¥ velge</div>
 
-<div class="dz-sub"><span class="fmt fmt-csv">CSV</span> · <span class="fmt fmt-pdf">PDF</span> · <span class="fmt fmt-img">Bilder ✨ AI-utlesning</span></div>
+<div class="dz-sub"><span class="fmt fmt-csv">CSV</span> Â· <span class="fmt fmt-pdf">PDF</span> Â· <span class="fmt fmt-img">Bilder â¨ AI-utlesning</span></div>
 
 <input type="file" id="fInp" multiple accept=".csv,.pdf,.png,.jpg,.jpeg,.gif,.webp,.heic" style="display:none" onchange="handleFiles(this)">
 
 </div>
 
-<div class="card"><div class="card-hdr"><div class="card-title">📋 Støttede formater (CSV)</div></div>
+<div class="card"><div class="card-hdr"><div class="card-title">ð StÃ¸ttede formater (CSV)</div></div>
 
 <div class="ig-grid">
 
-<div class="ig-col"><div class="ig-type" style="color:#dc2626">💸 UTLEGG / BANKUTSKRIFT</div>${[['Dato','dato, date'],['Beskrivelse','beskrivelse, name, tekst'],['Beløp (utgift)','beløp, belop, amount, ut'],['Kategori','kategori, category, type (auto-gjettes)'],['Referanse','referanse, ref']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
+<div class="ig-col"><div class="ig-type" style="color:#dc2626">ð¸ UTLEGG / BANKUTSKRIFT</div>${[['Dato','dato, date'],['Beskrivelse','beskrivelse, name, tekst'],['BelÃ¸p (utgift)','belÃ¸p, belop, amount, ut'],['Kategori','kategori, category, type (auto-gjettes)'],['Referanse','referanse, ref']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
 
-<div class="ig-col"><div class="ig-type" style="color:#3b82f6">🧾 FAKTURAER</div>${[['Fakturanr.','fakturanr, invoice, nr'],['Kunde','kunde, customer, client'],['Fakturadato','fakturadato, dato, date'],['Fakturabeløp','faktura, amount, belop'],['Netto','netto, net'],['Betalt','betalt, paid, status']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
+<div class="ig-col"><div class="ig-type" style="color:#3b82f6">ð§¾ FAKTURAER</div>${[['Fakturanr.','fakturanr, invoice, nr'],['Kunde','kunde, customer, client'],['Fakturadato','fakturadato, dato, date'],['FakturabelÃ¸p','faktura, amount, belop'],['Netto','netto, net'],['Betalt','betalt, paid, status']].map(([f,a])=>`<div class="ig-row"><span class="ig-f">${f}</span><span class="ig-a">${a}</span></div>`).join('')}</div>
 
 </div>
 
@@ -919,7 +919,7 @@ if(dt==='u'){S.utlegg=S.utlegg.map(u=>{if(u.id!==id)return u;const x={...u,[fiel
 
 else{S.fakturaer=S.fakturaer.map(f=>{if(f.id!==id)return f;const x={...f,[field]:val};if(field==='fakturadato')x.maned=getManed(val);if(field==='betalt'&&val==='Ja'&&!x.betalingsdato)x.betalingsdato=today();if(field==='betalt'&&val==='Nei')x.betalingsdato='';updated=x;return x;});}
 
-if(updated){setSyncStatus('☁️ Lagrer...');sbUpsert(dt==='u'?'utlegg':'fakturaer',updated);}
+if(updated){setSyncStatus('âï¸ Lagrer...');sbUpsert(dt==='u'?'utlegg':'fakturaer',updated);}
 
 }
 
@@ -931,13 +931,13 @@ if(!confirm('Slett denne posten?'))return;
 
 if(dt==='u')S.utlegg=S.utlegg.filter(x=>x.id!==id);else S.fakturaer=S.fakturaer.filter(x=>x.id!==id);
 
-setSyncStatus('☁️ Lagrer...');sbDelete(dt==='u'?'utlegg':'fakturaer',id);render();toast('Slettet');
+setSyncStatus('âï¸ Lagrer...');sbDelete(dt==='u'?'utlegg':'fakturaer',id);render();toast('Slettet');
 
 }
 
 function openAddU(){
 
-S.euId=null;document.getElementById('euTitle').textContent='💸 Legg til utlegg';
+S.euId=null;document.getElementById('euTitle').textContent='ð¸ Legg til utlegg';
 
 const euKatEl=document.getElementById('eu-kat');euKatEl.innerHTML=katOpsjoner('');euKatEl.onchange=function(){if(this.value==='__ny__'){const k=addKategori();this.innerHTML=katOpsjoner(k||KATEGORIER[0]);if(k)this.value=k;else this.value=KATEGORIER[0];}};
 
@@ -959,13 +959,13 @@ const u={id:S.euId||uid(),dato,beskrivelse:besk,kategori:document.getElementById
 
 if(S.euId)S.utlegg=S.utlegg.map(x=>x.id===S.euId?u:x);else S.utlegg.push(u);
 
-setSyncStatus('☁️ Lagrer...');sbUpsert('utlegg',u);closeModal('euModal');render();toast(S.euId?'Oppdatert':'Utlegg lagt til');
+setSyncStatus('âï¸ Lagrer...');sbUpsert('utlegg',u);closeModal('euModal');render();toast(S.euId?'Oppdatert':'Utlegg lagt til');
 
 }
 
 function openAddF(){
 
-S.efId=null;document.getElementById('efTitle').textContent='🧾 Legg til faktura';
+S.efId=null;document.getElementById('efTitle').textContent='ð§¾ Legg til faktura';
 
 const maxNr=Math.max(0,...S.fakturaer.map(f=>parseInt(f.fakturanr)||0));
 
@@ -991,7 +991,7 @@ const f={id:S.efId||uid(),fakturanr:document.getElementById('ef-nr').value.trim(
 
 if(S.efId)S.fakturaer=S.fakturaer.map(x=>x.id===S.efId?f:x);else S.fakturaer.push(f);
 
-setSyncStatus('☁️ Lagrer...');sbUpsert('fakturaer',f);closeModal('efModal');render();toast(S.efId?'Oppdatert':'Faktura lagt til');
+setSyncStatus('âï¸ Lagrer...');sbUpsert('fakturaer',f);closeModal('efModal');render();toast(S.efId?'Oppdatert':'Faktura lagt til');
 
 }
 
@@ -1037,7 +1037,7 @@ const tgt=S.impTarget==='auto'?(hasKunde?'fakturaer':'utlegg'):S.impTarget;
 
 if(tgt==='fakturaer'){const p=rows.map(csvToF).filter(f=>f.kunde);S.impPreview={items:p.map((x,i)=>({...x,_checked:true,_idx:i})),type:'fakturaer',fileName:file.name};logEntry(file.name,'ok',p.length+' fakturaer klar til gjennomgang');}
 
-else{const p=rows.map(csvToU).filter(u=>u.beskrivelse&&u.belop>0);S.impPreview={items:p.map((x,i)=>({...x,_checked:true,_idx:i})),type:'utlegg',fileName:file.name};logEntry(file.name,'ok',p.length+' utgifter funnet – velg hvilke som skal inn');}
+else{const p=rows.map(csvToU).filter(u=>u.beskrivelse&&u.belop>0);S.impPreview={items:p.map((x,i)=>({...x,_checked:true,_idx:i})),type:'utlegg',fileName:file.name};logEntry(file.name,'ok',p.length+' utgifter funnet â velg hvilke som skal inn');}
 
 S.showLog=true;render();
 
@@ -1051,27 +1051,27 @@ const r=new FileReader();
 
 r.onload=ev=>{const base64=ev.target.result.split(',')[1];const mimeType=file.type||'image/jpeg';S.bp={url:`data:${mimeType};base64,${base64}`,type:S.impTarget==='auto'?'fakturaer':S.impTarget,file:file.name,rows:[],base64,mimeType};showBP();};
 
-r.readAsDataURL(file);logEntry(file.name,'ok','Bilde åpnet for import');
+r.readAsDataURL(file);logEntry(file.name,'ok','Bilde Ã¥pnet for import');
 
 } else if(ext==='pdf'){
 
 const tgt=S.impTarget==='auto'?'fakturaer':S.impTarget;
 
-if(tgt==='fakturaer'){const f={id:uid(),fakturanr:'',kunde:'PDF – '+file.name,fakturadato:today(),forfallsdato:null,fakturabelop:0,netto:0,betalt:'Nei',betalingsdato:null,maned:getManed(today())};S.fakturaer.push(f);sbUpsert('fakturaer',f);}
+if(tgt==='fakturaer'){const f={id:uid(),fakturanr:'',kunde:'PDF â '+file.name,fakturadato:today(),forfallsdato:null,fakturabelop:0,netto:0,betalt:'Nei',betalingsdato:null,maned:getManed(today())};S.fakturaer.push(f);sbUpsert('fakturaer',f);}
 
-else{const u={id:uid(),dato:today(),beskrivelse:'PDF – '+file.name,kategori:'Annet',belop:0,referanse:'',maned:getManed(today())};S.utlegg.push(u);sbUpsert('utlegg',u);}
+else{const u={id:uid(),dato:today(),beskrivelse:'PDF â '+file.name,kategori:'Annet',belop:0,referanse:'',maned:getManed(today())};S.utlegg.push(u);sbUpsert('utlegg',u);}
 
-logEntry(file.name,'ok','PDF lagt til – fyll inn detaljer');S.showLog=true;render();
+logEntry(file.name,'ok','PDF lagt til â fyll inn detaljer');S.showLog=true;render();
 
-} else{logEntry(file.name,'err','Filformat ikke støttet');S.showLog=true;render();}
+} else{logEntry(file.name,'err','Filformat ikke stÃ¸ttet');S.showLog=true;render();}
 
 }
 
-function guessKategori(desc){const d=(desc||'').toLowerCase();if(d.includes('openai')||d.includes('chatgpt')||d.includes('claude.ai')||d.includes('anthropic')||d.includes('cursor')||d.includes('paddle')||d.includes('artlist')||d.includes('github')||d.includes('subscription')||d.includes('abonnement'))return'Programvare/SaaS';if(d.includes('airbnb')||d.includes('hotell')||d.includes('hotel'))return'Overnatting';if(d.includes('fly')||d.includes('flytog')||d.includes('parkfly')||d.includes('sas ')||d.includes('norwegian '))return'Reise';if(d.includes('mcd')||d.includes('bakeri')||d.includes('rema')||d.includes('edgars')||d.includes('storcash')||d.includes('sangbert')||d.includes('slakter')||d.includes('rice')||d.includes('mat ')||d.includes('herlig land')||d.includes('europris')||d.includes('norli')||d.includes('bønder'))return'Mat/Bevertning';if(d.includes('telavox')||d.includes('posten')||d.includes('tele')||d.includes('mobil'))return'Telefoni/Kommunikasjon';if(d.includes('fiken')||d.includes('network')||d.includes('homesourcing')||d.includes('butikkhjelp')||d.includes('puls ')||d.includes('konsulent'))return'Konsulentjenester';if(d.includes('apple.com')||d.includes('clas ohl')||d.includes('div'))return'Diverse';if(d.includes('lønn')||d.includes('lønnsutbetaling'))return'Lønn';if(d.includes('skatteet')||d.includes('innkrevings'))return'Skatt';return'Annet';}
+function guessKategori(desc){const d=(desc||'').toLowerCase();if(d.includes('openai')||d.includes('chatgpt')||d.includes('claude.ai')||d.includes('anthropic')||d.includes('cursor')||d.includes('paddle')||d.includes('artlist')||d.includes('github')||d.includes('subscription')||d.includes('abonnement'))return'Programvare/SaaS';if(d.includes('airbnb')||d.includes('hotell')||d.includes('hotel'))return'Overnatting';if(d.includes('fly')||d.includes('flytog')||d.includes('parkfly')||d.includes('sas ')||d.includes('norwegian '))return'Reise';if(d.includes('mcd')||d.includes('bakeri')||d.includes('rema')||d.includes('edgars')||d.includes('storcash')||d.includes('sangbert')||d.includes('slakter')||d.includes('rice')||d.includes('mat ')||d.includes('herlig land')||d.includes('europris')||d.includes('norli')||d.includes('bÃ¸nder'))return'Mat/Bevertning';if(d.includes('telavox')||d.includes('posten')||d.includes('tele')||d.includes('mobil'))return'Telefoni/Kommunikasjon';if(d.includes('fiken')||d.includes('network')||d.includes('homesourcing')||d.includes('butikkhjelp')||d.includes('puls ')||d.includes('konsulent'))return'Konsulentjenester';if(d.includes('apple.com')||d.includes('clas ohl')||d.includes('div'))return'Diverse';if(d.includes('lÃ¸nn')||d.includes('lÃ¸nnsutbetaling'))return'LÃ¸nn';if(d.includes('skatteet')||d.includes('innkrevings'))return'Skatt';return'Annet';}
 
-function csvToU(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=parseDate(g('dato','date')||today());const besk=String(g('beskr','desc','tekst','name','navn')||'').trim();const kat=String(g('kat','cat','kategori')||'').trim()||guessKategori(besk);return{id:uid(),dato,beskrivelse:besk,kategori:kat||'Annet',belop:parseFloat(String(g('beløp','belop','amount','sum','total','pris','ut')).replace(/[^\d.,-]/g,'').replace(',','.'))||0,referanse:String(g('ref','kv','voucher','referanse')||'').trim(),maned:getManed(dato)};}
+function csvToU(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=parseDate(g('dato','date')||today());const besk=String(g('beskr','desc','tekst','name','navn')||'').trim();const kat=String(g('kat','cat','kategori')||'').trim()||guessKategori(besk);return{id:uid(),dato,beskrivelse:besk,kategori:kat||'Annet',belop:parseFloat(String(g('belÃ¸p','belop','amount','sum','total','pris','ut')).replace(/[^\d.,-]/g,'').replace(',','.'))||0,referanse:String(g('ref','kv','voucher','referanse')||'').trim(),maned:getManed(dato)};}
 
-function csvToF(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=parseDate(g('fakturadato','dato','date','issued')||today());const belop=parseFloat(String(g('faktura','amount','total','sum','belop','beløp')).replace(/[^\d.,-]/g,'').replace(',','.'))||0;return{id:uid(),fakturanr:String(g('fakturanr','invoice','nr','number')||'').trim(),kunde:String(g('kunde','customer','client','name','navn')||'').trim(),fakturadato:dato,forfallsdato:String(g('forfall','due')||'')||null,fakturabelop:belop,netto:parseFloat(String(g('netto','net')).replace(/[^\d.,-]/g,'').replace(',','.'))||(Math.round(belop/1.25*100)/100),betalt:String(g('betalt','paid','status')||'Nei'),betalingsdato:String(g('betalingsdato','payment','paid_date')||'')||null,maned:getManed(dato)};}
+function csvToF(row){const ks=Object.keys(row);const g=(...a)=>{for(const al of a){const k=ks.find(k=>k.toLowerCase().includes(al));if(k&&row[k]!=='')return row[k];}return'';};const dato=parseDate(g('fakturadato','dato','date','issued')||today());const belop=parseFloat(String(g('faktura','amount','total','sum','belop','belÃ¸p')).replace(/[^\d.,-]/g,'').replace(',','.'))||0;return{id:uid(),fakturanr:String(g('fakturanr','invoice','nr','number')||'').trim(),kunde:String(g('kunde','customer','client','name','navn')||'').trim(),fakturadato:dato,forfallsdato:String(g('forfall','due')||'')||null,fakturabelop:belop,netto:parseFloat(String(g('netto','net')).replace(/[^\d.,-]/g,'').replace(',','.'))||(Math.round(belop/1.25*100)/100),betalt:String(g('betalt','paid','status')||'Nei'),betalingsdato:String(g('betalingsdato','payment','paid_date')||'')||null,maned:getManed(dato)};}
 
 function togglePreviewRow(idx,val){if(S.impPreview)S.impPreview.items.forEach(x=>{if(x._idx===idx)x._checked=val;});render();}
 
@@ -1095,11 +1095,11 @@ if(iF){S.fakturaer=[...S.fakturaer,...chosen];await sbUpsertMany('fakturaer',cho
 
 else{S.utlegg=[...S.utlegg,...chosen];await sbUpsertMany('utlegg',chosen);}
 
-logEntry(prev.fileName,'ok',chosen.length+' '+( iF?'fakturaer':'utlegg')+' importert ✓');
+logEntry(prev.fileName,'ok',chosen.length+' '+( iF?'fakturaer':'utlegg')+' importert â');
 
 S.impPreview=null;S.showLog=true;
 
-toast(chosen.length+' poster lagret ✓');goTab(prev.type);
+toast(chosen.length+' poster lagret â');goTab(prev.type);
 
 }
 
@@ -1111,13 +1111,13 @@ const bp=S.bp;if(!bp)return;
 
 const iF=bp.type==='fakturaer';
 
-const addedList=bp.rows.map((r,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #1e293b"><span style="color:#94a3b8">${esc(iF?r.kunde:r.beskrivelse)||'—'}</span><div style="display:flex;align-items:center;gap:8px"><span style="color:#3b82f6;font-weight:600">${nok(iF?r.netto:r.belop)}</span><button onclick="bpRemRow(${i})" style="color:#ef4444;background:none;border:none;cursor:pointer;font-size:14px;line-height:1">✕</button></div></div>`).join('');
+const addedList=bp.rows.map((r,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #1e293b"><span style="color:#94a3b8">${esc(iF?r.kunde:r.beskrivelse)||'â'}</span><div style="display:flex;align-items:center;gap:8px"><span style="color:#3b82f6;font-weight:600">${nok(iF?r.netto:r.belop)}</span><button onclick="bpRemRow(${i})" style="color:#ef4444;background:none;border:none;cursor:pointer;font-size:14px;line-height:1">â</button></div></div>`).join('');
 
-const form=iF?`<div class="form-row"><div class="fgrp"><label class="flbl">Fakturanr.</label><input class="finp" id="bp-nr" placeholder="10021"></div><div class="fgrp"><label class="flbl">Kunde</label><input class="finp" id="bp-kunde" placeholder="Leverandør AS"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="bp-forfall"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Netto</label><input type="number" class="finp" id="bp-netto" placeholder="0"></div></div><div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="bp-betalt"><option>Nei</option><option>Ja</option></select></div>`:`<div class="form-row"><div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="bp-kat">${KATEGORIER.map(k=>`<option>${k}</option>`).join('')}</select></div></div><div class="fgrp"><label class="flbl">Beskrivelse</label><input class="finp" id="bp-besk" placeholder="f.eks. Kvittering"></div><div class="form-row"><div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Referanse</label><input class="finp" id="bp-ref"></div></div>`;
+const form=iF?`<div class="form-row"><div class="fgrp"><label class="flbl">Fakturanr.</label><input class="finp" id="bp-nr" placeholder="10021"></div><div class="fgrp"><label class="flbl">Kunde</label><input class="finp" id="bp-kunde" placeholder="LeverandÃ¸r AS"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="bp-forfall"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">FakturabelÃ¸p (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Netto</label><input type="number" class="finp" id="bp-netto" placeholder="0"></div></div><div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="bp-betalt"><option>Nei</option><option>Ja</option></select></div>`:`<div class="form-row"><div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="bp-kat">${KATEGORIER.map(k=>`<option>${k}</option>`).join('')}</select></div></div><div class="fgrp"><label class="flbl">Beskrivelse</label><input class="finp" id="bp-besk" placeholder="f.eks. Kvittering"></div><div class="form-row"><div class="fgrp"><label class="flbl">BelÃ¸p (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Referanse</label><input class="finp" id="bp-ref"></div></div>`;
 
 const div=document.createElement('div');div.className='bp-overlay';div.id='bpOverlay';
 
-div.innerHTML=`<div class="bp-left"><div class="bp-left-hdr"><span style="color:white;font-weight:600;font-size:14px">📷 ${esc(bp.file)}</span><span style="color:#64748b;font-size:12px">${bp.rows.length} rader lagt til</span></div><div class="bp-img-wrap"><img src="${bp.url}" alt="Import"></div>${bp.rows.length?`<div class="bp-added"><div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:6px;text-transform:uppercase">Lagt til (${bp.rows.length})</div>${addedList}</div>`:''}</div><div class="bp-right"><div class="bp-right-hdr"><div><div style="font-weight:600;color:#0f172a;font-size:15px">${iF?'🧾 Legg inn faktura':'💸 Legg inn utlegg'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">Fyll inn fra bildet til venstre</div></div><button onclick="closeBP()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8">&times;</button></div><div class="bp-form"><div class="ai-hint" id="aiHint"></div><button class="ai-btn" id="aiBtn" onclick="doAI()"><div class="ai-spin" id="aiSpin"></div>✨ Les av med AI automatisk</button>${form}</div><div class="bp-actions"><button onclick="bpAddRow()" style="padding:10px;font-size:13px;font-weight:600;background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe;border-radius:8px;cursor:pointer;font-family:inherit">+ Legg til rad og fortsett</button><button onclick="bpSaveAll()" style="padding:10px;font-size:13px;font-weight:600;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit">✓ Lagre alle (${bp.rows.length}) og lukk</button></div></div>`;
+div.innerHTML=`<div class="bp-left"><div class="bp-left-hdr"><span style="color:white;font-weight:600;font-size:14px">ð· ${esc(bp.file)}</span><span style="color:#64748b;font-size:12px">${bp.rows.length} rader lagt til</span></div><div class="bp-img-wrap"><img src="${bp.url}" alt="Import"></div>${bp.rows.length?`<div class="bp-added"><div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:6px;text-transform:uppercase">Lagt til (${bp.rows.length})</div>${addedList}</div>`:''}</div><div class="bp-right"><div class="bp-right-hdr"><div><div style="font-weight:600;color:#0f172a;font-size:15px">${iF?'ð§¾ Legg inn faktura':'ð¸ Legg inn utlegg'}</div><div style="font-size:12px;color:#94a3b8;margin-top:2px">Fyll inn fra bildet til venstre</div></div><button onclick="closeBP()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8">&times;</button></div><div class="bp-form"><div class="ai-hint" id="aiHint"></div><button class="ai-btn" id="aiBtn" onclick="doAI()"><div class="ai-spin" id="aiSpin"></div>â¨ Les av med AI automatisk</button>${form}</div><div class="bp-actions"><button onclick="bpAddRow()" style="padding:10px;font-size:13px;font-weight:600;background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe;border-radius:8px;cursor:pointer;font-family:inherit">+ Legg til rad og fortsett</button><button onclick="bpSaveAll()" style="padding:10px;font-size:13px;font-weight:600;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit">â Lagre alle (${bp.rows.length}) og lukk</button></div></div>`;
 
 document.body.appendChild(div);
 
@@ -1133,7 +1133,7 @@ return{id:uid(),dato:document.getElementById('bp-dato')?.value||today(),beskrive
 
 }
 
-function bpAddRow(){const r=bpGetRad();const iF=S.bp.type==='fakturaer';if(!(iF?r.kunde:r.beskrivelse)){toast('Fyll ut minst leverandør/beskrivelse');return;}S.bp.rows.push(r);showBP();}
+function bpAddRow(){const r=bpGetRad();const iF=S.bp.type==='fakturaer';if(!(iF?r.kunde:r.beskrivelse)){toast('Fyll ut minst leverandÃ¸r/beskrivelse');return;}S.bp.rows.push(r);showBP();}
 
 function bpRemRow(i){S.bp.rows.splice(i,1);showBP();}
 
@@ -1143,13 +1143,13 @@ const bp=S.bp,last=bpGetRad(),iF=bp.type==='fakturaer';
 
 let all=[...bp.rows];if(iF?last.kunde:last.beskrivelse)all.push(last);
 
-if(!all.length){toast('Ingen rader å lagre');return;}
+if(!all.length){toast('Ingen rader Ã¥ lagre');return;}
 
 if(iF){const valid=all.filter(r=>r.kunde);S.fakturaer=[...S.fakturaer,...valid];sbUpsertMany('fakturaer',valid);}
 
 else{const valid=all.filter(r=>r.beskrivelse);S.utlegg=[...S.utlegg,...valid];sbUpsertMany('utlegg',valid);}
 
-closeBP();goTab(bp.type);toast(all.length+' poster lagret ✓');
+closeBP();goTab(bp.type);toast(all.length+' poster lagret â');
 
 }
 
@@ -1163,7 +1163,7 @@ const hint=document.getElementById('aiHint');
 
 const apiKey=localStorage.getItem('dj_anthropic_key')||'';
 
-if(!apiKey){if(hint){hint.textContent='Trenger Anthropic API-nøkkel. Klikk ⚙ øverst til høyre.';hint.style.background='#fef3c7';hint.style.borderColor='#fde68a';hint.style.color='#92400e';hint.classList.add('show');}return;}
+if(!apiKey){if(hint){hint.textContent='Trenger Anthropic API-nÃ¸kkel. Klikk â Ã¸verst til hÃ¸yre.';hint.style.background='#fef3c7';hint.style.borderColor='#fde68a';hint.style.color='#92400e';hint.classList.add('show');}return;}
 
 const btn=document.getElementById('aiBtn');
 
@@ -1175,7 +1175,7 @@ try{
 
 const iF=bp.type==='fakturaer';
 
-const prompt=iF?`Du leser fakturainformasjon fra et bilde. Ekstrahér ALLE fakturaer og returner KUN et JSON-array:\n[{"fakturanr":"","kunde":"","fakturadato":"YYYY-MM-DD","forfallsdato":"YYYY-MM-DD eller null","fakturabelop":0,"netto":0,"betalt":"Nei"}]\nReturner bare arrayet.`:`Du leser kvitteringer fra et bilde. Ekstrahér alle poster:\n[{"beskrivelse":"","kategori":"Annet","dato":"YYYY-MM-DD","belop":0,"referanse":""}]\nReturner bare JSON-arrayet.`;
+const prompt=iF?`Du leser fakturainformasjon fra et bilde. EkstrahÃ©r ALLE fakturaer og returner KUN et JSON-array:\n[{"fakturanr":"","kunde":"","fakturadato":"YYYY-MM-DD","forfallsdato":"YYYY-MM-DD eller null","fakturabelop":0,"netto":0,"betalt":"Nei"}]\nReturner bare arrayet.`:`Du leser kvitteringer fra et bilde. EkstrahÃ©r alle poster:\n[{"beskrivelse":"","kategori":"Annet","dato":"YYYY-MM-DD","belop":0,"referanse":""}]\nReturner bare JSON-arrayet.`;
 
 const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1024,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:bp.mimeType,data:bp.base64}},{type:'text',text:prompt}]}]})});
 
@@ -1183,7 +1183,7 @@ if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error
 
 const data=await res.json();const resStr=data.content[0].text;
 
-const arrM=resStr.match(/\[[\s\S]*\]/),objM=resStr.match(/\{[\s\S]*\}/);
+const cleanStr=resStr.replace(/```(?:json)?\s*/gi,'').replace(/```/g,'');const arrM=cleanStr.match(/\[[\s\S]*\]/),objM=cleanStr.match(/\{[\s\S]*\}/);
 
 let items=[];
 
@@ -1193,9 +1193,9 @@ const newRows=items.map(d=>iF?{id:uid(),fakturanr:d.fakturanr||'',kunde:d.kunde|
 
 S.bp.rows=[...S.bp.rows,...newRows];
 
-if(hint){hint.textContent=`✅ ${newRows.length} ${iF?'faktura(er)':'post(er)'} lest av`;hint.classList.add('show');}
+if(hint){hint.textContent=`â ${newRows.length} ${iF?'faktura(er)':'post(er)'} lest av`;hint.classList.add('show');}
 
-toast(`✨ ${newRows.length} poster funnet`);showBP();
+toast(`â¨ ${newRows.length} poster funnet`);showBP();
 
 }catch(err){if(hint){hint.textContent='Kunne ikke lese: '+err.message;}toast('AI-feil: '+err.message);}
 
@@ -1205,7 +1205,7 @@ finally{if(btn){btn.disabled=false;btn.classList.remove('loading');}}
 
 function openSettings(){document.getElementById('settingsKey').value=localStorage.getItem('dj_anthropic_key')||'';openModal('settingsModal');}
 
-function saveSettings(){const k=document.getElementById('settingsKey').value.trim();if(k)localStorage.setItem('dj_anthropic_key',k);else localStorage.removeItem('dj_anthropic_key');closeModal('settingsModal');toast(k?'API-nøkkel lagret ✓':'API-nøkkel fjernet');}
+function saveSettings(){const k=document.getElementById('settingsKey').value.trim();if(k)localStorage.setItem('dj_anthropic_key',k);else localStorage.removeItem('dj_anthropic_key');closeModal('settingsModal');toast(k?'API-nÃ¸kkel lagret â':'API-nÃ¸kkel fjernet');}
 
 function toggleExportMenu(ev){ev.stopPropagation();document.getElementById('expMenu').classList.toggle('open');}
 
@@ -1215,13 +1215,13 @@ function doExport(type){
 
 const data=type==='utlegg'?S.utlegg:S.fakturaer;
 
-if(!data.length){toast('Ingen data å eksportere');return;}
+if(!data.length){toast('Ingen data Ã¥ eksportere');return;}
 
 const keys=Object.keys(data[0]).filter(k=>k!=='id');
 
 const csv=[keys,...data.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"'))].map(r=>r.join(';')).join('\n');
 
-const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['ï»¿'+csv],{type:'text/csv;charset=utf-8'}));
 
 a.download=`DealJourney_${type}_${today()}.csv`;a.click();
 
@@ -1233,7 +1233,7 @@ function initMonths(){
 
 const sel=document.getElementById('monthSel');
 
-sel.innerHTML='<option value="alle">Alle måneder</option>';
+sel.innerHTML='<option value="alle">Alle mÃ¥neder</option>';
 
 MANEDER.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o);});
 
