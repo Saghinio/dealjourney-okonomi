@@ -1188,7 +1188,7 @@ const cleanStr=resStr.replace(/```(?:json)?\s*/gi,'').replace(/```/g,'');
 
 let items=[];
 
-if(jsonStr){const p=JSON.parse(jsonStr);items=Array.isArray(p)?p:[p];}else throw new Error('Ingen data i svaret');
+if(jsonStr){const p=JSON.parse(jsonStr);items=Array.isArray(p)?p:[p];}else throw new Error('Ingen JSON funnet. Claude svarte: '+cleanStr.substring(0,300));
 
 const newRows=items.map(d=>iF?{id:uid(),fakturanr:d.fakturanr||'',kunde:d.kunde||'',fakturadato:d.fakturadato&&d.fakturadato!=='null'?d.fakturadato:today(),forfallsdato:d.forfallsdato&&d.forfallsdato!=='null'?d.forfallsdato:null,fakturabelop:parseFloat(d.fakturabelop)||0,netto:(()=>{const fb=parseFloat(d.fakturabelop)||0;const n=parseFloat(d.netto)||0;return n&&n!==fb?n:Math.round(fb/1.25*100)/100;})(),betalt:d.betalt||'Nei',betalingsdato:null,maned:getManed(d.fakturadato||today())}:{id:uid(),dato:d.dato&&d.dato!=='null'?d.dato:today(),beskrivelse:d.beskrivelse||'',kategori:d.kategori||'Annet',belop:parseFloat(d.belop)||0,referanse:d.referanse||'',maned:getManed(d.dato||today())});
 
