@@ -904,7 +904,7 @@ else{el=document.createElement('input');el.className='inline-inp';el.type=ft||'t
 
 const commit=()=>{if(el.value==='__ny__'){const k=addKategori();patch(dt,id,f,k||(item[f]==='__ny__'?KATEGORIER[0]:item[f]));render();return;}const v=ft==='number'?(parseFloat(el.value)||0):el.value;patch(dt,id,f,v);render();};
 
-if(ft==='select'){el.addEventListener('change',commit);}else{el.addEventListener('blur',commit);}
+if(ft==='select'){el.addEventListener('change',commit);el.addEventListener('click',e=>e.stopPropagation());}else{el.addEventListener('blur',commit);}
 
 el.addEventListener('keydown',ev=>{if(ev.key==='Escape'){render();return;}if(ev.key==='Enter')el.blur();});
 
