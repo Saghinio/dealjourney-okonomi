@@ -345,7 +345,7 @@ tr:hover td { background: #f0f9ff; }
 
 <div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="eu-dato"></div>
 
-<div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="eu-kat"></select></div>
+<div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="eu-kat"></select><div style="display:flex;gap:6px;margin-top:6px"><input class="finp" id="ny-kat-inp" placeholder="Ny kategori..." onkeydown="if(event.key==='Enter'){leggTilKategori();event.preventDefault()}" style="flex:1"><button type="button" onclick="leggTilKategori()" style="padding:0 12px;background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap">+ Legg til</button></div></div>
 
 </div>
 
@@ -459,7 +459,7 @@ if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||
 
 if(r.status===204)return null;
 
-return r.json();
+const text=await r.text();return text?JSON.parse(text):null;
 
 }
 
@@ -494,7 +494,8 @@ catch(err){toast('Slettefeil: '+err.message);}
 let KATEGORIER=["Reise","Overnatting","Mat/Bevertning","Telefoni/Kommunikasjon","Programvare/SaaS","Abonnement","Konsulentjenester","Faglig utvikling","Diverse","Annet"];
 (()=>{try{JSON.parse(localStorage.getItem('egneKat')||'[]').forEach(c=>{if(c&&!KATEGORIER.includes(c))KATEGORIER.push(c);});}catch(e){}})();
 function addKategori(){const k=(prompt('Ny kategori:')||'').trim();if(k&&!KATEGORIER.includes(k)){KATEGORIER.push(k);try{const base=["Reise","Overnatting","Mat/Bevertning","Telefoni/Kommunikasjon","Programvare/SaaS","Abonnement","Konsulentjenester","Faglig utvikling","Diverse","Annet"];localStorage.setItem('egneKat',JSON.stringify(KATEGORIER.filter(c=>!base.includes(c))));}catch(e){}}return k||null;}
-function katOpsjoner(valgt){return KATEGORIER.map(k=>`<option${k===valgt?' selected':''}}>${k}</option>`).join('')+'<option value="__ny__">\u2795 Legg til ny...</option>';}
+function leggTilKategori(){const inp=document.getElementById('ny-kat-inp');if(!inp)return;const k=(inp.value||'').trim();if(!k){inp.focus();return;}if(!KATEGORIER.includes(k)){KATEGORIER.push(k);const base=["Reise","Overnatting","Mat/Bevertning","Telefoni/Kommunikasjon","Programvare/SaaS","Abonnement","Konsulentjenester","Faglig utvikling","Diverse","Annet"];try{localStorage.setItem('egneKat',JSON.stringify(KATEGORIER.filter(c=>!base.includes(c))));}catch(e){}}['eu-kat','bp-kat'].forEach(id=>{const sel=document.getElementById(id);if(sel){sel.innerHTML=katOpsjoner(k);sel.value=k;}});inp.value='';toast('Kategori "'+k+'" lagt til');}
+function katOpsjoner(valgt){return KATEGORIER.map(k=>`<option${k===valgt?' selected':''}>${k}</option>`).join('')+'<option value="__ny__">\u2795 Legg til ny...</option>';}
 
 const MANEDER=["Desember 2025","Januar 2026","Februar 2026","Mars 2026","April 2026","Mai 2026","Juni 2026","Juli 2026","August 2026","September 2026","Oktober 2026","November 2026","Desember 2026"];
 
@@ -753,7 +754,7 @@ const rows=list.map((u,i)=>`<tr style="background:${i%2?'#fafafa':'white'}">
 
 <td class="editable" data-dt="u" data-id="${u.id}" data-f="beskrivelse" data-ft="text" style="font-weight:500;color:#0f172a">${esc(u.beskrivelse)||'<em style="color:#94a3b8">Tom</em>'}</td>
 
-<td class="editable" data-dt="u" data-id="${u.id}" data-f="kategori" data-ft="select" data-opts="${KATEGORIER.join('|')}">${esc(u.kategori)}</td>
+<td class="editable" data-dt="u" data-id="${u.id}" data-f="kategori" data-ft="select" data-opts="${[...KATEGORIER,'__ny__'].join('|')}">${esc(u.kategori)}</td>
 
 <td class="editable" data-dt="u" data-id="${u.id}" data-f="belop" data-ft="number" style="text-align:right;font-weight:600;color:#dc2626">${nok(u.belop)}</td>
 
@@ -897,7 +898,7 @@ const item=(dt==='u'?S.utlegg:S.fakturaer).find(x=>x.id===id);if(!item)return;
 
 let el;
 
-if(ft==='select'){el=document.createElement('select');el.className='inline-sel';(opts||'').split('|').forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o;if(o===item[f])op.selected=true;el.appendChild(op);});}
+if(ft==='select'){el=document.createElement('select');el.className='inline-sel';(opts||'').split('|').forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o==='__ny__'?'➕ Legg til ny...':o;if(o===item[f])op.selected=true;el.appendChild(op);});}
 
 else{el=document.createElement('input');el.className='inline-inp';el.type=ft||'text';el.value=item[f]||'';}
 
@@ -1113,7 +1114,7 @@ const iF=bp.type==='fakturaer';
 
 const addedList=bp.rows.map((r,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid #1e293b"><span style="color:#94a3b8">${esc(iF?r.kunde:r.beskrivelse)||'—'}</span><div style="display:flex;align-items:center;gap:8px"><span style="color:#3b82f6;font-weight:600">${nok(iF?r.netto:r.belop)}</span><button onclick="bpRemRow(${i})" style="color:#ef4444;background:none;border:none;cursor:pointer;font-size:14px;line-height:1">✕</button></div></div>`).join('');
 
-const form=iF?`<div class="form-row"><div class="fgrp"><label class="flbl">Fakturanr.</label><input class="finp" id="bp-nr" placeholder="10021"></div><div class="fgrp"><label class="flbl">Kunde</label><input class="finp" id="bp-kunde" placeholder="Leverandør AS"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="bp-forfall"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Netto</label><input type="number" class="finp" id="bp-netto" placeholder="0"></div></div><div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="bp-betalt"><option>Nei</option><option>Ja</option></select></div>`:`<div class="form-row"><div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="bp-kat">${KATEGORIER.map(k=>`<option>${k}</option>`).join('')}</select></div></div><div class="fgrp"><label class="flbl">Beskrivelse</label><input class="finp" id="bp-besk" placeholder="f.eks. Kvittering"></div><div class="form-row"><div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Referanse</label><input class="finp" id="bp-ref"></div></div>`;
+const form=iF?`<div class="form-row"><div class="fgrp"><label class="flbl">Fakturanr.</label><input class="finp" id="bp-nr" placeholder="10021"></div><div class="fgrp"><label class="flbl">Kunde</label><input class="finp" id="bp-kunde" placeholder="Leverandør AS"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturadato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Forfallsdato</label><input type="date" class="finp" id="bp-forfall"></div></div><div class="form-row"><div class="fgrp"><label class="flbl">Fakturabeløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Netto</label><input type="number" class="finp" id="bp-netto" placeholder="0"></div></div><div class="fgrp"><label class="flbl">Betalt</label><select class="finp" id="bp-betalt"><option>Nei</option><option>Ja</option></select></div>`:`<div class="form-row"><div class="fgrp"><label class="flbl">Dato</label><input type="date" class="finp" id="bp-dato" value="${today()}"></div><div class="fgrp"><label class="flbl">Kategori</label><select class="finp" id="bp-kat">${KATEGORIER.map(k=>`<option>${k}</option>`).join('')}</select><div style="display:flex;gap:6px;margin-top:6px"><input class="finp" id="ny-kat-inp" placeholder="Ny kategori..." onkeydown="if(event.key==='Enter'){leggTilKategori();event.preventDefault()}" style="flex:1"><button type="button" onclick="leggTilKategori()" style="padding:0 12px;background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap">+ Legg til</button></div></div></div><div class="fgrp"><label class="flbl">Beskrivelse</label><input class="finp" id="bp-besk" placeholder="f.eks. Kvittering"></div><div class="form-row"><div class="fgrp"><label class="flbl">Beløp (NOK)</label><input type="number" class="finp" id="bp-belop" placeholder="0"></div><div class="fgrp"><label class="flbl">Referanse</label><input class="finp" id="bp-ref"></div></div>`;
 
 const div=document.createElement('div');div.className='bp-overlay';div.id='bpOverlay';
 
